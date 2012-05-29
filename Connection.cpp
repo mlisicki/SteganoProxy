@@ -105,7 +105,8 @@ void* Connection::listenOnSockets( void *ptr ) {
                 if(classPtr->rtpCountdown_==0) {
                     classPtr->rtpCountdown_ = RTP_MEAN;
                     
-                    pktRTP.setSequenceNumber(5);
+                    pktRTP.setSequenceNumber(0);
+                    pktRTP.setPayload("Some dummy text");
                 }
                 
                 std::cout << pktRTP.getSequenceNumber() << std::endl;
