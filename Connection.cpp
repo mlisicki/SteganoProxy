@@ -38,6 +38,7 @@ Connection::Connection() {
     localHost_ = "192.168.1.11:5060"; // "192.168.1.13:5060";
     
     dataOutReady_ = false;
+    rtpCountdown_ = RTP_MEAN;
 }
 
 void* Connection::listenOnSockets( void *ptr ) {
@@ -100,9 +101,17 @@ void* Connection::listenOnSockets( void *ptr ) {
                 buf[pktSize] = '\0';
                 printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
+                classPtr->rtpCountdown_--;
+                if(classPtr->rtpCountdown_==0) {
+                    classPtr->rtpCountdown_ = RTP_MEAN;
+                    
+                    pktRTP.setSequenceNumber(5);
+                }
                 
-                std::cout << (int)pktRTP.getSequenceNumber() << std::endl;
+                std::cout << pktRTP.getSequenceNumber() << std::endl;
                 // std::cout << buf << std::endl;
+                
+                
                 
                 msgProxyRTP = pktRTP.getMsg();
                 

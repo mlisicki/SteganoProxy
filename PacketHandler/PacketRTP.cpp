@@ -53,11 +53,11 @@ unsigned char PacketRTP::getField(std::string header) {
 
 int PacketRTP::getSequenceNumber() {
     int fnum = floor(headers_["seq_num"]->first/8);
-    char* seq = &msg_[fnum];
+    unsigned char* seq = &msg_[fnum];
 
     int seqNum = (int)seq[0];
-    seqNum << 8;
-    std::cout << "seq[0]=" << (int)seq[0] << "seq[1]=" << (int)seq[1] << "seqNum=" << seqNum << std::endl;
+    seqNum = (seqNum << 8);
+//    std::cout << "seq[0]=" << (int)seq[0] << "seq[1]=" << (int)seq[1] << "seqNum=" << seqNum << std::endl;
     seqNum += (int)seq[1];
         
     return seqNum;
@@ -66,8 +66,8 @@ int PacketRTP::getSequenceNumber() {
 void PacketRTP::setSequenceNumber(int seqNum) {
     int fnum = floor(headers_["seq_num"]->first/8);
 
-    msg_[fnum+1] = (unsigned char) seqNum;
-    seqNum >> 8;
+    msg_[fnum+1] = (unsigned char) (seqNum & 255);
+    seqNum = (seqNum >> 8);
     msg_[fnum] = (unsigned char) seqNum;
 }
 

@@ -85,8 +85,12 @@ private:
     static const int RTP_INTERNAL_PORT = 16102;
     static const char* SIP_PROXY_HOST;
     
+    // Parameters for random countdown setting
     static const int RTP_MEAN = 10;
     static const int RTP_STD_DEV = 3;
+    
+    // Countdown for next packet with hidden message
+    int rtpCountdown_;
     
     bool connected_;
     bool dataOutReady_;
