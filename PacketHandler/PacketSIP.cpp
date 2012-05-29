@@ -346,6 +346,59 @@ bool PacketSIP::setViaHost(std::string host) {
     return true;
 }
 
+bool PacketSIP::setViaRport(std::string host) {
+    char* ch;
+    char* found;
+    char* newField = new char[300];
+
+    if((ch = getField("Via"))==NULL)
+        return false;
+    if((found = strstr(ch,"rport"))==NULL)
+        return false;
+    int i=0;
+    while(ch!=found) {
+        newField[i] = *ch;
+        ch++;
+        i++;
+    }
+        
+    while(*ch!='=') {
+        newField[i] = *ch;
+        ch++;
+        i++;
+    }
+    newField[i] = *ch;
+    ch++; 
+    i++;
+
+    int hS = 0;
+    while(hS < host.size()) {
+        newField[i] = host[hS];
+        hS++;
+        i++;
+    }
+    
+    while(*ch!=';')
+        ch++;
+    
+    newField[i] = *ch;
+    ch++; 
+    i++;
+    
+    while(*ch!='\r' && *ch!='\n') {
+        newField[i] = *ch;
+        ch++;
+        i++;
+    }
+    
+    newField[i] = '\r';
+    newField[i+1] = '\n';
+  
+    setField("Via", newField);
+    
+    return true;
+}
+
 bool PacketSIP::setRequestLineHost(std::string requestType,std::string host) {
     char* ch;
     char* found;
@@ -595,6 +648,9 @@ std::string PacketSIP::getMsg() {
         msg += "\r\n";
         i++;
     }
+    
+    if((getField("Content-Type"))!=NULL && strstr(ch,"@"))
+    if(getField("Content-Type"))
     
     msg += "\r\n";
     

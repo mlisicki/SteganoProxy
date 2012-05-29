@@ -358,6 +358,7 @@ bool Connection::init() {
                 }
 //                if((pktSIP.getSDP()->getRTPIP())!="" && localHost_!="") {
                 if(localHost_!="") {
+                    pktSIP.getSDP()->setRTPIP(localHost_);
                     modifyOutcomingSIP(pktSIP);
                 }
                 
@@ -620,8 +621,7 @@ int Connection::sendPacket(PacketHandler::Packet packet) {
 void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
         if(pktSIP.checkMethod("100 Trying")) {
             pktSIP.setViaHost("127.0.0.1:5063");
-        ////                    pktSIP.setViaReceivedHost(SIP_PROXY_HOST); ??
-        ////                    pktSIP.setViaRport("127.0.0.1:5063"); ??
+            pktSIP.setViaRport("5063");
         }                
         else if(pktSIP.checkMethod("401 Unauthorized")) {
             pktSIP.setViaHost("127.0.0.1:5063");
@@ -632,7 +632,13 @@ void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
         else if(pktSIP.checkMethod("200 OK")) {
             pktSIP.setViaHost("127.0.0.1:5063");
             pktSIP.setContactHost("127.0.0.1:5063");
-        } 
+        }
+        else if(pktSIP.checkMethod("PUBLISH")) {
+            pktSIP.setRequestLineHost("PUBLISH","127.0.0.1:5063");
+            pktSIP.setViaHost("127.0.0.1:5061");
+            pktSIP.setVHost("127.0.0.1:5063");
+            pktSIP.setVRport("5063");
+        }
         else if(pktSIP.checkMethod("INVITE")) {
             pktSIP.setRequestLineHost("INVITE","127.0.0.1:5063");                    
             // RTP stuff here
@@ -650,7 +656,6 @@ void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
 }
 
 void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
-            pktSIP.getSDP()->setRTPIP(localHost_);
         if(pktSIP.checkMethod("PUBLISH")) {
             pktSIP.setVHost(localHost_);
         }
