@@ -1,21 +1,23 @@
 /* 
- * File:   Symbol.h
- * Author: mike
+ * File:   XMLSymbol.cpp
+ * Author: Michal Lisicki
  * 
  * Created on December 6, 2011, 6:26 AM
  */
 
-#include "Symbol.h"
+#include "XMLSymbol.h"
 
-SymbolValue Symbol::get() {
+using namespace Parser;
+
+XMLSymbolValue XMLSymbol::get() {
     return value_;
 }
 
-char Symbol::getCharacter() {
+char XMLSymbol::getCharacter() {
     return character_;
 }
 
-int Symbol::set(char c) {
+int XMLSymbol::set(char c) {
     character_ = c;
     if((c>='a' && c<='z') || (c>='A' && c<='Z')) value_ = letter;
     else if(c>='0' && c<='9')                        value_ = number;
@@ -35,6 +37,6 @@ int Symbol::set(char c) {
     return 1;
 }
 
-bool Symbol::operator==(SymbolValue other) const {
+bool XMLSymbol::operator==(XMLSymbolValue other) const {
     return (value_ == other);
 }

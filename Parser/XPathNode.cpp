@@ -7,6 +7,8 @@
 
 #include "XPathNode.h"
 
+using namespace Parser;
+
 XPathNode::XPathNode(std::string name, XPNodeType type) { 
     name_ = name;
     type_ = type;

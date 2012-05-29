@@ -25,6 +25,8 @@ private:
     ApplicationManager();
     ApplicationManager(const ApplicationManager& orig);
     virtual ~ApplicationManager();
+    
+    void loadConfigurationFromFile(char* filename);
 };
 
 #endif	/* APPLICATIONMANAGER_H */

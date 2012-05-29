@@ -8,6 +8,8 @@
 #include "XPath.h"
 #include <iostream>
 
+using namespace Parser;
+
 XPath::XPath() {
     
 }

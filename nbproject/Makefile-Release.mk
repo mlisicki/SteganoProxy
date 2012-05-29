@@ -36,11 +36,14 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Connection.o \
 	${OBJECTDIR}/ApplicationManager.o \
+	${OBJECTDIR}/Parser/XPath.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/PacketHandler/PacketSIP.o \
 	${OBJECTDIR}/PacketHandler/PacketRTP.o \
+	${OBJECTDIR}/Parser/XMLParser.o \
 	${OBJECTDIR}/Parser/Symbol.o \
 	${OBJECTDIR}/PacketHandler/SDP.o \
+	${OBJECTDIR}/Parser/XPathNode.o \
 	${OBJECTDIR}/PacketHandler/Packet.o \
 	${OBJECTDIR}/Parser/SIPParser.o
 
@@ -79,6 +82,11 @@ ${OBJECTDIR}/ApplicationManager.o: ApplicationManager.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/ApplicationManager.o ApplicationManager.cpp
 
+${OBJECTDIR}/Parser/XPath.o: Parser/XPath.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XPath.o Parser/XPath.cpp
+
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -94,6 +102,11 @@ ${OBJECTDIR}/PacketHandler/PacketRTP.o: PacketHandler/PacketRTP.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/PacketHandler/PacketRTP.o PacketHandler/PacketRTP.cpp
 
+${OBJECTDIR}/Parser/XMLParser.o: Parser/XMLParser.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XMLParser.o Parser/XMLParser.cpp
+
 ${OBJECTDIR}/Parser/Symbol.o: Parser/Symbol.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Parser
 	${RM} $@.d
@@ -103,6 +116,11 @@ ${OBJECTDIR}/PacketHandler/SDP.o: PacketHandler/SDP.cpp
 	${MKDIR} -p ${OBJECTDIR}/PacketHandler
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/PacketHandler/SDP.o PacketHandler/SDP.cpp
+
+${OBJECTDIR}/Parser/XPathNode.o: Parser/XPathNode.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XPathNode.o Parser/XPathNode.cpp
 
 ${OBJECTDIR}/PacketHandler/Packet.o: PacketHandler/Packet.cpp 
 	${MKDIR} -p ${OBJECTDIR}/PacketHandler

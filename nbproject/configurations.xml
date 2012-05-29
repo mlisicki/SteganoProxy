@@ -27,6 +27,12 @@
         <itemPath>Parser/SIPParser.h</itemPath>
         <itemPath>Parser/Symbol.cpp</itemPath>
         <itemPath>Parser/Symbol.h</itemPath>
+        <itemPath>Parser/XMLParser.cpp</itemPath>
+        <itemPath>Parser/XMLParser.h</itemPath>
+        <itemPath>Parser/XPath.cpp</itemPath>
+        <itemPath>Parser/XPath.h</itemPath>
+        <itemPath>Parser/XPathNode.cpp</itemPath>
+        <itemPath>Parser/XPathNode.h</itemPath>
       </logicalFolder>
       <itemPath>ApplicationManager.cpp</itemPath>
       <itemPath>ApplicationManager.h</itemPath>
@@ -46,6 +52,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>Parser</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">

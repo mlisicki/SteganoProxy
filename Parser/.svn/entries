@@ -106,7 +106,7 @@ file
 6
 
 
-
+delete
 2012-01-23T06:06:23.000000Z
 981d5405ff495d4371184ef9456a646f
 2012-01-23T05:52:03.790963Z
@@ -140,7 +140,7 @@ file
 
 
 
-
+delete
 2012-01-22T15:29:07.000000Z
 3c8520b177cd31dfa003a9ae295675c0
 2012-01-23T04:23:29.718624Z
@@ -168,4 +168,50 @@ has-props
 
 
 444
+
+XMLSymbol.cpp
+file
+
+
+
+add
+
+981d5405ff495d4371184ef9456a646f
+
+
+
+has-props
+
+
+
+
+
+
+
+copied
+https://steganovoip.googlecode.com/svn/trunk/SteganoProxy/Parser/Symbol.cpp
+6
+
+XMLSymbol.h
+file
+
+
+
+add
+
+3c8520b177cd31dfa003a9ae295675c0
+
+
+
+has-props
+
+
+
+
+
+
+
+copied
+https://steganovoip.googlecode.com/svn/trunk/SteganoProxy/Parser/Symbol.h
+5
 

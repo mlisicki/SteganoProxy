@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <iostream>
 
+using namespace Parser;
+
 XMLParser::XMLParser(char* file, XPath xPath) {
     scanStream_.open(file, std::fstream::in);
     if(!scanStream_.is_open()) {

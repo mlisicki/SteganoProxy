@@ -10,6 +10,8 @@
 
 #include <string>
 
+namespace Parser {
+
 enum XPNodeType {elem, attr, end};
 
 class XPathNode {   
@@ -27,5 +29,7 @@ private:
 	XPNodeType type_;
         std::string name_; 
 };
+
+}
 
 #endif	/* XPATHNODE_H */

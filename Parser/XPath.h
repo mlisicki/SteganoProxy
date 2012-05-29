@@ -11,6 +11,8 @@
 #include <string>
 #include "XPathNode.h"
 
+namespace Parser {
+
 class XPath {
 public:
         XPath();
@@ -30,5 +32,7 @@ private:
 	XPathNode* current_;
         bool valid_; // check if path is valid up to this point
 };
+
+}
 
 #endif	/* XPATH_H */

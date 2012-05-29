@@ -11,7 +11,9 @@
 #include <fstream>
 #include <list>
 #include "XPath.h"
-#include "Symbol.h"
+#include "XMLSymbol.h"
+
+namespace Parser {
 
 class XMLParser {
 public:
@@ -44,6 +46,8 @@ private:
     
     std::list<std::string> output_;
 };
+
+}
 
 #endif	/* PARSER_H */
 

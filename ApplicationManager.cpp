@@ -7,6 +7,9 @@
 
 #include <iostream>
 #include <fstream>
+#include <list>
+#include "Parser/XPath.h"
+#include "Parser/XMLParser.h"
 
 #include "ApplicationManager.h"
 
@@ -29,13 +32,13 @@ std::string ApplicationManager::readLine(char* text) {
     return out;
 }
 
-std::string ApplicationManager::loadConfigurationFromFile(char* filename) {
-    XPath xPath("/configuration/sip_external_port");
-    Parser parser(filename, xPath);
+void ApplicationManager::loadConfigurationFromFile(char* filename) {
+    Parser::XPath xPath("/configuration/sip_external_port");
+    Parser::XMLParser parser(filename, xPath);
     try { 
         parser.program();
     } catch(char const* err) {
-        cout << err << endl;
+        std::cout << err << std::endl;
     }
     
     std::list<std::string> result;

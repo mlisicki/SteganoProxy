@@ -10,7 +10,7 @@
 
 #include "SIPParser.h"
 
-using namespace XMLParser;
+using namespace Parser;
 
 SIPParser::SIPParser() {
 }
