@@ -57,8 +57,9 @@ int PacketRTP::getSequenceNumber() {
 
     int seqNum = (int)seq[0];
     seqNum << 8;
+    std::cout << "seq[0]=" << (int)seq[0] << "seq[1]=" << (int)seq[1] << "seqNum=" << seqNum << std::endl;
     seqNum += (int)seq[1];
-    
+        
     return seqNum;
 }
 

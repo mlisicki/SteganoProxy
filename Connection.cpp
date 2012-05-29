@@ -83,7 +83,6 @@ void* Connection::listenOnSockets( void *ptr ) {
                 buf[pktSize] = '\0';
                 printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
-                // std::cout << (int)pktRTP.getSequenceNumber() << std::endl;
                 // std::cout << pktRTP.getPayload() << std::endl;
                 
                 // prepare the message to send
@@ -100,9 +99,10 @@ void* Connection::listenOnSockets( void *ptr ) {
                 }
                 buf[pktSize] = '\0';
                 printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
+                PacketHandler::PacketRTP pktRTP(buf, pktSize);
                 
+                std::cout << (int)pktRTP.getSequenceNumber() << std::endl;
                 // std::cout << buf << std::endl;
-                PacketHandler::PacketRTP pktRTP(buf,pktSize);
                 
                 msgProxyRTP = pktRTP.getMsg();
                 
@@ -112,7 +112,7 @@ void* Connection::listenOnSockets( void *ptr ) {
                     classPtr->sout_.str("");
                 }
                                 
-                std::cout << msgProxyRTP << std::endl;
+                // std::cout << msgProxyRTP << std::endl;
                 
                 // prepare the message to send
                 slen = sizeof(classPtr->siRTPProxy_);    
@@ -325,22 +325,22 @@ bool Connection::init() {
                  //    std::cout << " Local Connection IP: " << localHost_ << std::endl;                    
                  // }
 
-                if(pktSIP.checkMethod("100 Trying")) {
-                    std::cout << "100 Trying" << std::endl;
-                    pktSIP.setViaHost("127.0.0.1:5063");
-//                    pktSIP.setViaReceivedHost("127.0.0.1:5063");
-//                    pktSIP.setViaRHost("127.0.0.1:5063");
-                }
-                else if(pktSIP.checkMethod("401 Unauthorized")) {
-                    pktSIP.setViaHost("127.0.0.1:5063");
-                }
-                else if(pktSIP.checkMethod("404 Not Found")) {
-                    pktSIP.setViaHost("127.0.0.1:5063");
-                }
-                else if(pktSIP.checkMethod("200 OK")) {
-                    pktSIP.setViaHost("127.0.0.1:5063");
-                    pktSIP.setContactHost("127.0.0.1:5063");
-                } 
+//                if(pktSIP.checkMethod("100 Trying")) {
+//                    std::cout << "100 Trying" << std::endl;
+//                    pktSIP.setViaHost("127.0.0.1:5063");
+////                    pktSIP.setViaReceivedHost("127.0.0.1:5063");
+////                    pktSIP.setViaRHost("127.0.0.1:5063");
+//                }
+//                else if(pktSIP.checkMethod("401 Unauthorized")) {
+//                    pktSIP.setViaHost("127.0.0.1:5063");
+//                }
+//                else if(pktSIP.checkMethod("404 Not Found")) {
+//                    pktSIP.setViaHost("127.0.0.1:5063");
+//                }
+//                else if(pktSIP.checkMethod("200 OK")) {
+//                    pktSIP.setViaHost("127.0.0.1:5063");
+//                    pktSIP.setContactHost("127.0.0.1:5063");
+//                } 
 //                else if(pktSIP.checkMethod("INVITE")) {
 //                    pktSIP.setRequestLineHost("127.0.0.1:5063");
 //                    pktSIP.setRequestURIHost("127.0.0.1:5063");
@@ -390,14 +390,14 @@ bool Connection::init() {
                 }
 //                if((pktSIP.getSDP()->getRTPIP())!="" && localHost_!="") {
                 if(localHost_!="") {
-                    pktSIP.getSDP()->setRTPIP(localHost_);
-                    if(pktSIP.checkMethod("PUBLISH")) {
-                        pktSIP.setVHost(localHost_);
-                    }
-                    else if(pktSIP.checkMethod("REGISTER")) {
-                        pktSIP.setVHost(localHost_);
-                        pktSIP.setMHost(localHost_);
-                    }
+//                    pktSIP.getSDP()->setRTPIP(localHost_);
+//                    if(pktSIP.checkMethod("PUBLISH")) {
+//                        pktSIP.setVHost(localHost_);
+//                    }
+//                    else if(pktSIP.checkMethod("REGISTER")) {
+//                        pktSIP.setVHost(localHost_);
+//                        pktSIP.setMHost(localHost_);
+//                    }
 //                    else if(pktSIP.checkMethod("100 Trying")) {
 //                        pktSIP.setViaReceivedHost(localHost_);
 //                        pktSIP.setViaRHost(localHost_);                        

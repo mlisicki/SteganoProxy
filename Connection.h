@@ -85,6 +85,9 @@ private:
     static const int RTP_INTERNAL_PORT = 16102;
     static const char* SIP_PROXY_HOST;
     
+    static const int RTP_MEAN = 10;
+    static const int RTP_STD_DEV = 3;
+    
     bool connected_;
     bool dataOutReady_;
     
