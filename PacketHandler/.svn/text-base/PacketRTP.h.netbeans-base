@@ -1,0 +1,21 @@
+/* 
+ * File:   PacketRTP.h
+ * Author: Michal Lisicki
+ *
+ * Created on January 17, 2012, 1:29 PM
+ */
+
+#ifndef PACKETRTP_H
+#define	PACKETRTP_H
+
+class PacketRTP : public Packet {
+public:
+    PacketRTP();
+    PacketRTP(const PacketRTP& orig);
+    virtual ~PacketRTP();
+private:
+
+};
+
+#endif	/* PACKETRTP_H */
+

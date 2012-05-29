@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/5/trunk/SteganoProxy/Parser
+END
+Symbol.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/5/trunk/SteganoProxy/Parser/Symbol.h
+END
+SIPParser.h
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/5/trunk/SteganoProxy/Parser/SIPParser.h
+END
+Symbol.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/6/trunk/SteganoProxy/Parser/Symbol.cpp
+END
+SIPParser.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/6/trunk/SteganoProxy/Parser/SIPParser.cpp
+END

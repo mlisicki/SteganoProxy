@@ -1,0 +1,18 @@
+/* 
+ * File:   PacketRTP.cpp
+ * Author: Michal Lisicki
+ * 
+ * Created on January 17, 2012, 1:29 PM
+ */
+
+#include "PacketRTP.h"
+
+PacketRTP::PacketRTP() {
+}
+
+PacketRTP::PacketRTP(const PacketRTP& orig) {
+}
+
+PacketRTP::~PacketRTP() {
+}
+
