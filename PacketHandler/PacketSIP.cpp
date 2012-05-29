@@ -649,11 +649,16 @@ std::string PacketSIP::getMsg() {
         i++;
     }
     
-    if((getField("Content-Type"))!=NULL && strstr(ch,"@"))
-    if(getField("Content-Type"))
-    
-    msg += "\r\n";
-    
+    char* ct = getField("Content-Type");
+    char* c = getField("c");
+    if((ct!=NULL && (strstr(ct,"xml"))!=NULL) || 
+       (c!=NULL && (strstr(c,"xml"))!=NULL)) {
+        msg.resize(msg.size()-2);
+        msg += '\n';
+    } else {
+        msg += "\r\n";     
+    }
+       
     msg += sdp_->getMsg();
         
     return msg;
