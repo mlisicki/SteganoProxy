@@ -82,7 +82,7 @@ void* Connection::listenOnSockets( void *ptr ) {
                     exit(1);
                 }
                 buf[pktSize] = '\0';
-                printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
+                // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
                 // std::cout << pktRTP.getPayload() << std::endl;
                 
@@ -99,28 +99,29 @@ void* Connection::listenOnSockets( void *ptr ) {
                     exit(1);
                 }
                 buf[pktSize] = '\0';
-                printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
+                // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
                 classPtr->rtpCountdown_--;
                 if(classPtr->rtpCountdown_==0) {
                     classPtr->rtpCountdown_ = RTP_MEAN;
                     
-                    pktRTP.setSequenceNumber(0);
-                    pktRTP.setPayload("Some dummy text");
+                    if (classPtr->dataOutReady_) {
+                        pktRTP.setSequenceNumber(0);
+                        pktRTP.setPayload(classPtr->sout_.str());
+                        classPtr->dataOutReady_ = false;
+                        classPtr->sout_.str("");
+                        
+                        printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
+                        std::cout << pktRTP.getSequenceNumber() << std::endl;
+                        std::cout << pktRTP.getPayload() << std::endl;
+                    }
                 }
-                
-                std::cout << pktRTP.getSequenceNumber() << std::endl;
+               
                 // std::cout << buf << std::endl;
                 
                 
                 
                 msgProxyRTP = pktRTP.getMsg();
-                
-                if (classPtr->dataOutReady_) {
-                    pktRTP.setSequenceNumber(0);
-                    classPtr->dataOutReady_ = false;
-                    classPtr->sout_.str("");
-                }
                                 
                 // std::cout << msgProxyRTP << std::endl;
                 
@@ -177,13 +178,12 @@ void* Connection::listenOnSockets( void *ptr ) {
     }
 }
 
-bool Connection::init() {
+pthread_t& Connection::init() {
 #ifdef _WIN32
     WSADATA WsaData;
     WSAStartup(MAKEWORD(2,2), &WsaData);
 #endif
     struct hostent *hp, *gethostbyname();
-    pthread_t listeningThread;
     int slen;
     int pktSize;
     Parser::SIPParser sipParser;
@@ -608,9 +608,9 @@ bool Connection::init() {
   
     std::cout << "Done." << std::endl;    
  
-    pthread_create( &listeningThread, NULL, &Connection::listenOnSockets, (void*) this);        
+    pthread_create( &listeningThread_, NULL, &Connection::listenOnSockets, (void*) this);
     
-    pthread_join( listeningThread, NULL);    
+    return listeningThread_;
 }
 
 Connection::Connection(const Connection& orig) {

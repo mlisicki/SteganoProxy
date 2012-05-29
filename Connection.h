@@ -37,7 +37,7 @@ public:
     Connection(const Connection& orig);
     virtual ~Connection();
 
-    bool init();
+    pthread_t& init();
     
     std::istringstream& getInputStream();
     std::ostringstream& getOutputStream();
@@ -103,6 +103,8 @@ private:
     struct sockaddr_in siSIPApplicationListen_, siRTPApplicationListen_, siSIPProxyListen_, siRTPProxyListen_;
 
 //    pthread_mutex_t writeMessageMutex_ = PTHREAD_MUTEX_INITIALIZER;    
+    
+    pthread_t listeningThread_;
     
     void wait(float seconds);
 

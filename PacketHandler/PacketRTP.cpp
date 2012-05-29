@@ -83,12 +83,13 @@ std::string PacketRTP::getPayload() {
 void PacketRTP::setPayload(std::string payload) {
      for(int i=floor(headers_["payload"]->first/8); i <= floor(headers_["payload"]->second/8); i++) {
          if((i-floor(headers_["payload"]->first/8))<payload.size()) {
-             int payloadId =  i-floor(headers_["payload"]->first/8);
-             std::cout << payloadId;
-          //   msg_[i] = payload[i-floor(headers_["payload"]->first/8)];
+          //   int payloadId =  i-floor(headers_["payload"]->first/8);
+          //   std::cout << payloadId;
+             msg_[i] = payload[i-floor(headers_["payload"]->first/8)];
          }
-      //   else
-      //       msg_[i] = '\0';
+         else {
+             msg_[i] = '\0';
+         }
      }
 }
 
