@@ -1,14 +1,15 @@
 /* 
  * File:   Symbol.h
- * Author: Michal Lisicki
+ * Author: mike
  *
- * Created on January 18, 2012, 1:20 PM
+ * Created on December 5, 2011, 1:13 AM
  */
 
 #ifndef SYMBOL_H
 #define	SYMBOL_H
 
-typedef enum {letter, number, white, sym, nullchar, nextline, equal } SymbolValue;
+// atoms
+typedef enum {letter, number, white, slash, qMark, equal, lt, gt, opensym, closesym, sym} SymbolValue;
 
 class Symbol {
 public:

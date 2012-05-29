@@ -27,3 +27,7 @@ std::string ApplicationManager::readLine(char* text) {
     }
     return out;
 }
+
+std::string ApplicationManager::loadConfigurationFromFile(char* text) {
+    
+}

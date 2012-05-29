@@ -12,7 +12,7 @@
 
 #include "Symbol.h"
 
-namespace Parser {
+namespace XMLParser {
 
 class SIPParser {
 public:
