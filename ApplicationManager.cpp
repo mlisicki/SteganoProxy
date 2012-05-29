@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 
 #include "ApplicationManager.h"
 
@@ -28,6 +29,19 @@ std::string ApplicationManager::readLine(char* text) {
     return out;
 }
 
-std::string ApplicationManager::loadConfigurationFromFile(char* text) {
+std::string ApplicationManager::loadConfigurationFromFile(char* filename) {
+    XPath xPath("/configuration/sip_external_port");
+    Parser parser(filename, xPath);
+    try { 
+        parser.program();
+    } catch(char const* err) {
+        cout << err << endl;
+    }
     
+    std::list<std::string> result;
+    result = parser.getResult();
+    
+    for (std::list<std::string>::iterator it=result.begin(); it!=result.end(); ++it)
+        std::cout << " " << *it;
+    std::cout << std::endl;
 }

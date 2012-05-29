@@ -42,13 +42,6 @@ int XMLParser::accept(SymbolValue atom) {
     return 0;
 }
 
-//void XMLParser::document() {
-//	element();
-//	while(true) {
-//		element();
-//	}
-//}
-
 void XMLParser::element() {
     std::string tagName = startTag();
     if(symbol_==slash) return;
@@ -113,7 +106,7 @@ void XMLParser::content() {
             else break;
         }
         if(xPath_.getCurrent()==xPath_.getLast()) {
-                std::cout << text << std::endl;
+            output_.push_back(text);
         }
         //@TODO what if there will be '/' in a text
     }
@@ -140,7 +133,7 @@ void XMLParser::attribute() {
     if(xPath_.getCurrent()->getName()==attName && 
        xPath_.getCurrent()->getType()==attr &&
        xPath_.getValid()) {
-       std::cout << value << std::endl;
+       output_.push_back(value);
     }
     xPath_.prev();
 }
@@ -184,4 +177,8 @@ void XMLParser::headerTag() {
 void XMLParser::program() {
     headerTag();
     element();
+}
+
+std::list<std::string>& XMLParser::getResult() {
+    return output_;
 }

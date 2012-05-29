@@ -9,6 +9,7 @@
 #define	PARSER_H
 
 #include <fstream>
+#include <list>
 #include "XPath.h"
 #include "Symbol.h"
 
@@ -32,6 +33,7 @@ public:
     void headerTag();     
     void program();
     
+    std::list<std::string>& getResult();
 //    void program();
 //    friend class Synchronize;
 private:
@@ -39,6 +41,8 @@ private:
     Symbol back_;
     std::fstream scanStream_;
     XPath xPath_;
+    
+    std::list<std::string> output_;
 };
 
 #endif	/* PARSER_H */

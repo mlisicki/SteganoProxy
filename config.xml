@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration>
+	<sip_external_port>5060</sip_external_port>
+</configuration>
