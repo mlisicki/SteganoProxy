@@ -328,8 +328,8 @@ bool Connection::init() {
                 if(pktSIP.checkMethod("100 Trying")) {
                     std::cout << "100 Trying" << std::endl;
                     pktSIP.setViaHost("127.0.0.1:5063");
-//                    pktSIP.setViaReceivedHost("127.0.0.1:5063");
-//                    pktSIP.setViaRHost("127.0.0.1:5063");
+////                    pktSIP.setViaReceivedHost(SIP_PROXY_HOST); ??
+////                    pktSIP.setViaRport("127.0.0.1:5063"); ??
                 }
                 else if(pktSIP.checkMethod("401 Unauthorized")) {
                     pktSIP.setViaHost("127.0.0.1:5063");
@@ -341,12 +341,12 @@ bool Connection::init() {
                     pktSIP.setViaHost("127.0.0.1:5063");
                     pktSIP.setContactHost("127.0.0.1:5063");
                 } 
-//                else if(pktSIP.checkMethod("INVITE")) {
+                else if(pktSIP.checkMethod("INVITE")) {
 //                    pktSIP.setRequestLineHost("127.0.0.1:5063");
 //                    pktSIP.setRequestURIHost("127.0.0.1:5063");
-//                    
-//                    // RTP stuff here
-//                }
+                    
+                    // RTP stuff here
+                }
 //                else if(pktSIP.checkMethod("ACK")) {
 //                    pktSIP.setRequestLineHost("127.0.0.1:5063");
 //                    pktSIP.setRequestURIHost("127.0.0.1:5063");                    
@@ -398,20 +398,20 @@ bool Connection::init() {
                         pktSIP.setVHost(localHost_);
                         pktSIP.setMHost(localHost_);
                     }
-//                    else if(pktSIP.checkMethod("100 Trying")) {
-//                        pktSIP.setViaReceivedHost(localHost_);
-//                        pktSIP.setViaRHost(localHost_);                        
-//                    }
-//                    else if(pktSIP.checkMethod("180 Ringing")) {
-//                        pktSIP.setVReceivedHost(localHost_);
-//                        pktSIP.setMHost(localHost_);
+                    else if(pktSIP.checkMethod("100 Trying")) {
+                        pktSIP.setVReceivedHost(SIP_PROXY_HOST);
+                        pktSIP.setVRport(8060);                        
+                    }
+                    else if(pktSIP.checkMethod("180 Ringing")) {
+                        pktSIP.setVReceivedHost(localHost_);
+                        pktSIP.setMHost(localHost_);
 //                        pktSIP.setContactURIHost(localHost_);
-//                    }
-//                    else if(pktSIP.checkMethod("200 OK")) {
-//                        pktSIP.setVReceivedHost(localHost_);
-//                        pktSIP.setMHost(localHost_);
+                    }
+                    else if(pktSIP.checkMethod("200 OK")) {
+                        pktSIP.setVReceivedHost(localHost_);
+                        pktSIP.setMHost(localHost_);
 //                        pktSIP.setContactURIHost(localHost_);                       
-//                    }
+                    }
                 }
 
           //      if(pktSIP.checkMethod("REGISTER")) std::cout << "REGISTER" << std::endl;
