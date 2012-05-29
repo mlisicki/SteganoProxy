@@ -28,6 +28,7 @@
 #endif
 
 #include "PacketHandler/Packet.h"
+#include "PacketHandler/PacketSIP.h"
         
 #include "Connection.h"
 
@@ -101,6 +102,9 @@ private:
 
     PacketHandler::Packet receivePacket();
     int sendPacket(PacketHandler::Packet packet);
+    
+    void modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP);
+    void modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP);
     
     static void *listenOnSockets( void *ptr );
     

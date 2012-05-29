@@ -11,7 +11,6 @@
 #include <pthread.h>
 #include <algorithm>
 
-#include "PacketHandler/PacketSIP.h"
 #include "Parser/SIPParser.h"
 #include "PacketHandler/PacketRTP.h"
 #include "ApplicationManager.h"
@@ -133,6 +132,8 @@ void* Connection::listenOnSockets( void *ptr ) {
               //  printf("\nReceived SIP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketSIP pktSIP = sipParser.generatePacket(buf);
 
+                classPtr->modifyIncomingSIP(pktSIP);
+                
                 msgApplication = pktSIP.getMsg();                
                 
                 // prepare the message to send
@@ -153,6 +154,8 @@ void* Connection::listenOnSockets( void *ptr ) {
               //  printf("\nReceived SIP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));       
                 PacketHandler::PacketSIP pktSIP = sipParser.generatePacket(buf);
 
+                classPtr->modifyOutcomingSIP(pktSIP);
+                
                 msgProxy = pktSIP.getMsg();                
                 
                 // prepare the message to send
@@ -325,36 +328,8 @@ bool Connection::init() {
                  //    std::cout << " Local Connection IP: " << localHost_ << std::endl;                    
                  // }
 
-                if(pktSIP.checkMethod("100 Trying")) {
-                    std::cout << "100 Trying" << std::endl;
-                    pktSIP.setViaHost("127.0.0.1:5063");
-////                    pktSIP.setViaReceivedHost(SIP_PROXY_HOST); ??
-////                    pktSIP.setViaRport("127.0.0.1:5063"); ??
-                }
-                else if(pktSIP.checkMethod("401 Unauthorized")) {
-                    pktSIP.setViaHost("127.0.0.1:5063");
-                }
-                else if(pktSIP.checkMethod("404 Not Found")) {
-                    pktSIP.setViaHost("127.0.0.1:5063");
-                }
-                else if(pktSIP.checkMethod("200 OK")) {
-                    pktSIP.setViaHost("127.0.0.1:5063");
-                    pktSIP.setContactHost("127.0.0.1:5063");
-                } 
-                else if(pktSIP.checkMethod("INVITE")) {
-                    pktSIP.setRequestLineHost("INVITE","127.0.0.1:5063");                    
-                    // RTP stuff here
-                }
-                else if(pktSIP.checkMethod("ACK")) {
-                    pktSIP.setRequestLineHost("ACK","127.0.0.1:5063");
-                }
-                else if(pktSIP.checkMethod("OPTIONS")) {
-                    pktSIP.setRequestLineHost("OPTIONS","127.0.0.1:5063");
-                    pktSIP.setToHost("127.0.0.1:5063");
-                }
-                else if(pktSIP.checkMethod("BYE")) {
-                    pktSIP.setRequestLineHost("BYE","127.0.0.1:5063");                }
-                
+                modifyIncomingSIP(pktSIP);
+                                
                 msgApplication = pktSIP.getMsg();
                 
                 // prepare the message to send
@@ -383,28 +358,9 @@ bool Connection::init() {
                 }
 //                if((pktSIP.getSDP()->getRTPIP())!="" && localHost_!="") {
                 if(localHost_!="") {
-                    pktSIP.getSDP()->setRTPIP(localHost_);
-                    if(pktSIP.checkMethod("PUBLISH")) {
-                        pktSIP.setVHost(localHost_);
-                    }
-                    else if(pktSIP.checkMethod("REGISTER")) {
-                        pktSIP.setVHost(localHost_);
-                        pktSIP.setMHost(localHost_);
-                    }
-                    else if(pktSIP.checkMethod("100 Trying")) {
-                        pktSIP.setVReceivedHost(SIP_PROXY_HOST);
-                        pktSIP.setVRport(8060);                        
-                    }
-                    else if(pktSIP.checkMethod("180 Ringing")) {
-                        pktSIP.setVReceivedHost(localHost_);
-                        pktSIP.setMHost(localHost_);
-                    }
-                    else if(pktSIP.checkMethod("200 OK")) {
-                        pktSIP.setVReceivedHost(localHost_);
-                        pktSIP.setMHost(localHost_);
-                    }
+                    modifyOutcomingSIP(pktSIP);
                 }
-
+                
           //      if(pktSIP.checkMethod("REGISTER")) std::cout << "REGISTER" << std::endl;
           //      if(pktSIP.checkMethod("INVITE")) std::cout << "INVITE" << std::endl;
                 
@@ -547,6 +503,9 @@ bool Connection::init() {
                 if((pktSIP.getSDP()->getRTPIP())!="") {
                     pktSIP.getSDP()->setRTPIP("127.0.0.1");
                 }
+                
+                modifyIncomingSIP(pktSIP);
+                
                 msgApplication = pktSIP.getMsg();                
                 
                 // prepare the message to send
@@ -574,6 +533,9 @@ bool Connection::init() {
                 if((pktSIP.getSDP()->getRTPIP())!="") {
                     pktSIP.getSDP()->setRTPIP(localHost_);
                 }
+                
+                modifyOutcomingSIP(pktSIP);
+                
                 msgProxy = pktSIP.getMsg();
                 
                 // prepare the message to send
@@ -653,4 +615,59 @@ PacketHandler::Packet Connection::receivePacket() {
 
 int Connection::sendPacket(PacketHandler::Packet packet) {
     
+}
+
+void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
+        if(pktSIP.checkMethod("100 Trying")) {
+            pktSIP.setViaHost("127.0.0.1:5063");
+        ////                    pktSIP.setViaReceivedHost(SIP_PROXY_HOST); ??
+        ////                    pktSIP.setViaRport("127.0.0.1:5063"); ??
+        }                
+        else if(pktSIP.checkMethod("401 Unauthorized")) {
+            pktSIP.setViaHost("127.0.0.1:5063");
+        }
+        else if(pktSIP.checkMethod("404 Not Found")) {
+            pktSIP.setViaHost("127.0.0.1:5063");
+        }
+        else if(pktSIP.checkMethod("200 OK")) {
+            pktSIP.setViaHost("127.0.0.1:5063");
+            pktSIP.setContactHost("127.0.0.1:5063");
+        } 
+        else if(pktSIP.checkMethod("INVITE")) {
+            pktSIP.setRequestLineHost("INVITE","127.0.0.1:5063");                    
+            // RTP stuff here
+        }
+        else if(pktSIP.checkMethod("ACK")) {
+            pktSIP.setRequestLineHost("ACK","127.0.0.1:5063");
+        }
+        else if(pktSIP.checkMethod("OPTIONS")) {
+            pktSIP.setRequestLineHost("OPTIONS","127.0.0.1:5063");
+            pktSIP.setToHost("127.0.0.1:5063");
+        }
+        else if(pktSIP.checkMethod("BYE")) {
+            pktSIP.setRequestLineHost("BYE","127.0.0.1:5063");                
+        }   
+}
+
+void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
+            pktSIP.getSDP()->setRTPIP(localHost_);
+        if(pktSIP.checkMethod("PUBLISH")) {
+            pktSIP.setVHost(localHost_);
+        }
+        else if(pktSIP.checkMethod("REGISTER")) {
+            pktSIP.setVHost(localHost_);
+            pktSIP.setMHost(localHost_);
+        }
+        else if(pktSIP.checkMethod("100 Trying")) {
+            pktSIP.setVReceivedHost(SIP_PROXY_HOST);
+            pktSIP.setVRport("8060");                        
+        }
+        else if(pktSIP.checkMethod("180 Ringing")) {
+            pktSIP.setVReceivedHost(localHost_);
+            pktSIP.setMHost(localHost_);
+        }
+        else if(pktSIP.checkMethod("200 OK")) {
+            pktSIP.setVReceivedHost(localHost_);
+            pktSIP.setMHost(localHost_);
+        }
 }

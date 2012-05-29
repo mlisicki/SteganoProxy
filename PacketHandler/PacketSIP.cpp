@@ -136,7 +136,7 @@ std::string PacketSIP::getReceivedHost() {
 bool PacketSIP::setVHost(std::string host) {
     char* ch;
     char* found;
-    char* newField = new char[200];
+    char* newField = new char[300];
 
     if((ch = getField("v"))==NULL)
         return false;
@@ -189,7 +189,7 @@ bool PacketSIP::setVHost(std::string host) {
 bool PacketSIP::setVReceivedHost(std::string host) {
     char* ch;
     char* found;
-    char* newField = new char[200];
+    char* newField = new char[300];
 
     if((ch = getField("v"))==NULL)
         return false;
@@ -242,7 +242,7 @@ bool PacketSIP::setVReceivedHost(std::string host) {
 bool PacketSIP::setVRport(std::string host) {
     char* ch;
     char* found;
-    char* newField = new char[200];
+    char* newField = new char[300];
 
     if((ch = getField("v"))==NULL)
         return false;
@@ -541,55 +541,6 @@ bool PacketSIP::setContactHost(std::string host) {
     
     return true;
 }
-
-//bool PacketSIP::setRequestLineHost(std::string host) {
-//    char* ch;
-//    char* found;
-//    char* newField = new char[200];
-//
-//    if((ch = getField("m"))==NULL)
-//        return false;
-//    if((found = strstr(ch,"@"))==NULL)
-//        return false;
-//        
-//    int i=0;
-//    while(ch!=found) {
-//        newField[i] = *ch;
-//        ch++;
-//        i++;
-//    }
-//        
-//    newField[i] = *ch;
-//    ch++; 
-//    i++;
-//
-//    int hS = 0;
-//    while(hS < host.size()) {
-//        newField[i] = host[hS];
-//        hS++;
-//        i++;
-//    }
-//    
-//    while(*ch!=';')
-//        ch++;
-//    
-//    newField[i] = *ch;
-//    ch++; 
-//    i++;
-//    
-//    while(*ch!='\r' && *ch!='\n') {
-//        newField[i] = *ch;
-//        ch++;
-//        i++;
-//    }
-//    
-//    newField[i] = '\r';
-//    newField[i+1] = '\n';
-//  
-//    setField("m", newField);
-//    
-//    return true;
-//}
 
 bool PacketSIP::checkMethod(std::string method) {
     std::string out = "";
