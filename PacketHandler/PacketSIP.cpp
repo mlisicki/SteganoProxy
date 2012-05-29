@@ -624,14 +624,20 @@ void PacketSIP::setSDP(SDP* sdp) {
 std::string PacketSIP::getMsg() {
     std::string msg = "";
     
-    // Set Content-Length
-    std::string sdp = sdp_->getMsg();
-    char* contentLength = new char[10];
-    snprintf(contentLength, sizeof(contentLength), "%d", sdp.length());
-    int strLen = strlen(contentLength);
-    contentLength[strLen] = '\r';
-    contentLength[strLen+1] = '\n';
-    setField("Content-Length",contentLength);
+    char* ct = getField("Content-Type");
+    char* c = getField("c");
+    
+    if(!((ct!=NULL && (strstr(ct,"xml"))!=NULL) || 
+       (c!=NULL && (strstr(c,"xml"))!=NULL))) {
+            // Set Content-Length
+            std::string sdp = sdp_->getMsg();
+            char* contentLength = new char[10];
+            snprintf(contentLength, sizeof(contentLength), "%d", sdp.length());
+            int strLen = strlen(contentLength);
+            contentLength[strLen] = '\r';
+            contentLength[strLen+1] = '\n';
+            setField("Content-Length",contentLength);
+    }
     
     HMap::const_iterator sortedElements[100];
     HMap::const_iterator it;
@@ -656,8 +662,6 @@ std::string PacketSIP::getMsg() {
     
     msg += "\r\n";
     
-    char* ct = getField("Content-Type");
-    char* c = getField("c");
     if((ct!=NULL && (strstr(ct,"xml"))!=NULL) || 
        (c!=NULL && (strstr(c,"xml"))!=NULL)) {
         msg += getXML();

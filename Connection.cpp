@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <algorithm>
+#include <sstream>
 
 #include "Parser/SIPParser.h"
 #include "PacketHandler/PacketRTP.h"
@@ -34,7 +35,7 @@ Connection::Connection() {
     rtpApplicationPort_ = 0; 
     rtpProxyPort_ = 0;
     rtpProxyHost_ = "";
-    localHost_ = "192.168.1.11"; // "192.168.1.13:5060";
+    localHost_ = "10.0.2.15"; // "192.168.1.13:5060";
     localPort_ = "5060";
     
     dataOutReady_ = false;
@@ -620,46 +621,49 @@ int Connection::sendPacket(PacketHandler::Packet packet) {
 }
 
 void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
+        std::stringstream applicationPort;
+        applicationPort << sipApplicationPort_;
+        std::stringstream internalPort;
+        internalPort << sipInternalPort_;
         if(pktSIP.checkMethod("100 Trying")) {
-            std::string port = "";
-            port += sipApplicationPort_;
-            pktSIP.setViaHost("127.0.0.1"+port);
-            pktSIP.setViaRport(port);
+            pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
+            pktSIP.setViaRport(applicationPort.str());
             // TODO: int to string
         }                
         else if(pktSIP.checkMethod("401 Unauthorized")) {
-            pktSIP.setViaHost("127.0.0.1:5063");
+            pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
         }
         else if(pktSIP.checkMethod("404 Not Found")) {
-            pktSIP.setViaHost("127.0.0.1:5063");
+            pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
         }
         else if(pktSIP.checkMethod("200 OK")) {
-            pktSIP.setViaHost("127.0.0.1:5063");
-            pktSIP.setContactHost("127.0.0.1:5063");
+            pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
+            pktSIP.setContactHost("127.0.0.1:"+applicationPort.str());
         }
         else if(pktSIP.checkMethod("PUBLISH")) {
-            pktSIP.setRequestLineHost("PUBLISH","127.0.0.1:5063");
-            pktSIP.setViaHost("127.0.0.1:5061");
-            pktSIP.setVHost("127.0.0.1:5063");
-            pktSIP.setVRport("5063");
+            pktSIP.setRequestLineHost("PUBLISH","127.0.0.1:"+applicationPort.str());
+            pktSIP.setViaHost("127.0.0.1:"+internalPort.str());
+            pktSIP.setVHost("127.0.0.1:"+applicationPort.str());
+            pktSIP.setVRport(applicationPort.str());
         }
         else if(pktSIP.checkMethod("INVITE")) {
-            pktSIP.setRequestLineHost("INVITE","127.0.0.1:5063");                    
-            // RTP stuff here
+            pktSIP.setRequestLineHost("INVITE","127.0.0.1");                    
         }
         else if(pktSIP.checkMethod("ACK")) {
-            pktSIP.setRequestLineHost("ACK","127.0.0.1:5063");
+            pktSIP.setRequestLineHost("ACK","127.0.0.1:"+applicationPort.str());
         }
         else if(pktSIP.checkMethod("OPTIONS")) {
-            pktSIP.setRequestLineHost("OPTIONS","127.0.0.1:5063");
-            pktSIP.setToHost("127.0.0.1:5063");
+            pktSIP.setRequestLineHost("OPTIONS","127.0.0.1:"+applicationPort.str());
+            pktSIP.setToHost("127.0.0.1:"+applicationPort.str());
         }
         else if(pktSIP.checkMethod("BYE")) {
-            pktSIP.setRequestLineHost("BYE","127.0.0.1:5063");                
+            pktSIP.setRequestLineHost("BYE","127.0.0.1:"+applicationPort.str());                
         }   
 }
 
 void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
+        std::stringstream proxyPort;
+        proxyPort << sipProxyPort_;
         if(pktSIP.checkMethod("PUBLISH")) {
             pktSIP.setVHost(localHost_+":"+localPort_);
         }
@@ -669,16 +673,16 @@ void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
         }
         else if(pktSIP.checkMethod("100 Trying")) {
             pktSIP.setVReceivedHost(SIP_PROXY_HOST);
-            pktSIP.setVRport("8060");                        
+            pktSIP.setVRport(proxyPort.str());                        
         }
         else if(pktSIP.checkMethod("180 Ringing")) {
             pktSIP.setVReceivedHost(SIP_PROXY_HOST);
-            pktSIP.setVRport("8060");
+            pktSIP.setVRport(proxyPort.str());
             pktSIP.setMHost(localHost_+":"+localPort_);
         }
         else if(pktSIP.checkMethod("200 OK")) {
             pktSIP.setVReceivedHost(SIP_PROXY_HOST);
-            pktSIP.setVRport("8060");
+            pktSIP.setVRport(proxyPort.str());
             pktSIP.setMHost(localHost_+":"+localPort_);
         }
 }
