@@ -19,6 +19,7 @@ using namespace PacketHandler;
 PacketSIP::PacketSIP() {
     sdp_ = new SDP();
     contents_[0] = NULL;
+    xmlBody_ = "";
 }
 
 PacketSIP::PacketSIP(const PacketSIP& orig) {
@@ -610,6 +611,10 @@ bool PacketSIP::checkMethod(std::string method) {
 
 SDP* PacketSIP::getSDP() {
     return sdp_;
+}
+
+std::string& PacketSIP::getXML() {
+    return xmlBody_;
 }
 
 void PacketSIP::setSDP(SDP* sdp) {

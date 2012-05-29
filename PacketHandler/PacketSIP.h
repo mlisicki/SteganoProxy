@@ -72,6 +72,7 @@ private:
     char* contents_[100];
     HMap headers_;
     SDP* sdp_;
+    std::string xmlBody_;
 };
 
 }

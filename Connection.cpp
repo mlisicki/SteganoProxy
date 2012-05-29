@@ -668,11 +668,13 @@ void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
             pktSIP.setVRport("8060");                        
         }
         else if(pktSIP.checkMethod("180 Ringing")) {
-            pktSIP.setVReceivedHost(localHost_);
+            pktSIP.setVReceivedHost("192.168.1.11");
+            pktSIP.setVRport("5060");
             pktSIP.setMHost(localHost_);
         }
         else if(pktSIP.checkMethod("200 OK")) {
-            pktSIP.setVReceivedHost(localHost_);
+            pktSIP.setVReceivedHost("192.168.1.11");
+            pktSIP.setVRport("5060");
             pktSIP.setMHost(localHost_);
         }
 }

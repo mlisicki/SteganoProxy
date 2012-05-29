@@ -50,12 +50,25 @@ PacketHandler::PacketSIP SIPParser::generatePacket(char* msg) {
     }
     if(!(symbol_==nullchar)) {
         pos = 0;
-        while(!(symbol_==nextline || symbol_==nullchar || symbol_==white)) {
-            sdpHdr = SDPheader();
-            pktSIP.getSDP()->setFieldAndPosition(pos,sdpHdr,scanStream_);
-            content();
-            accept(nextline);
-            pos++;     
+        
+        char* ct = pktSIP.getField("Content-Type");
+        char* c = pktSIP.getField("c");
+        if((ct!=NULL && (strstr(ct,"xml"))!=NULL) || 
+            (c!=NULL && (strstr(c,"xml"))!=NULL)) {
+                while(!(symbol_==nextline || symbol_==nullchar)) {
+                    pktSIP.getXML() << content();
+                    accept(nextline);
+                    pos++;
+                }
+        } else {
+            // SDP
+            while(!(symbol_==nextline || symbol_==nullchar || symbol_==white)) {
+                sdpHdr = SDPheader();
+                pktSIP.getSDP()->setFieldAndPosition(pos,sdpHdr,scanStream_);
+                content();
+                accept(nextline);
+                pos++;     
+            }   
         }
     }
     
