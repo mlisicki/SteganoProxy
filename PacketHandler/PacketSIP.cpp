@@ -346,6 +346,55 @@ bool PacketSIP::setViaHost(std::string host) {
     return true;
 }
 
+bool PacketSIP::setRequestLineHost(std::string requestType,std::string host) {
+    char* ch;
+    char* found;
+    char* newField = new char[200];
+
+    if((ch = getField(requestType))==NULL)
+        return false;
+    if((found = strstr(ch,"@"))==NULL)
+        return false;
+
+    int i=0;
+    while(ch!=found) {
+        newField[i] = *ch;
+        ch++;
+        i++;
+    }
+
+    newField[i] = *ch;
+    ch++; 
+    i++;
+
+    int hS = 0;
+    while(hS < host.size()) {
+        newField[i] = host[hS];
+        hS++;
+        i++;
+    }
+    
+    while(*ch!=';')
+        ch++;
+    
+    newField[i] = *ch;
+    ch++; 
+    i++;
+    
+    while(*ch!='\r' && *ch!='\n') {
+        newField[i] = *ch;
+        ch++;
+        i++;
+    }
+    
+    newField[i] = '\r';
+    newField[i+1] = '\n';
+  
+    setField(requestType, newField);
+    
+    return true;
+}
+
 bool PacketSIP::setMHost(std::string host) {
     char* ch;
     char* found;
@@ -391,6 +440,55 @@ bool PacketSIP::setMHost(std::string host) {
     newField[i+1] = '\n';
   
     setField("m", newField);
+    
+    return true;
+}
+
+bool PacketSIP::setToHost(std::string host) {
+    char* ch;
+    char* found;
+    char* newField = new char[200];
+
+    if((ch = getField("To"))==NULL)
+        return false;
+    if((found = strstr(ch,"@"))==NULL)
+        return false;
+        
+    int i=0;
+    while(ch!=found) {
+        newField[i] = *ch;
+        ch++;
+        i++;
+    }
+        
+    newField[i] = *ch;
+    ch++; 
+    i++;
+
+    int hS = 0;
+    while(hS < host.size()) {
+        newField[i] = host[hS];
+        hS++;
+        i++;
+    }
+    
+    while(*ch!='>')
+        ch++;
+    
+    newField[i] = *ch;
+    ch++; 
+    i++;
+    
+    while(*ch!='\r' && *ch!='\n') {
+        newField[i] = *ch;
+        ch++;
+        i++;
+    }
+    
+    newField[i] = '\r';
+    newField[i+1] = '\n';
+  
+    setField("To", newField);
     
     return true;
 }

@@ -342,25 +342,18 @@ bool Connection::init() {
                     pktSIP.setContactHost("127.0.0.1:5063");
                 } 
                 else if(pktSIP.checkMethod("INVITE")) {
-//                    pktSIP.setRequestLineHost("127.0.0.1:5063");
-//                    pktSIP.setRequestURIHost("127.0.0.1:5063");
-                    
+                    pktSIP.setRequestLineHost("INVITE","127.0.0.1:5063");                    
                     // RTP stuff here
                 }
-//                else if(pktSIP.checkMethod("ACK")) {
-//                    pktSIP.setRequestLineHost("127.0.0.1:5063");
-//                    pktSIP.setRequestURIHost("127.0.0.1:5063");                    
-//                }
-//                else if(pktSIP.checkMethod("OPTIONS")) {
-//                    pktSIP.setRequestLineHost("127.0.0.1:5063");
-//                    pktSIP.setRequestURIHost("127.0.0.1:5063");
-//                    pktSIP.setToHost("127.0.0.1:5063");
-//                    pktSIP.setSIPToAddressHost("127.0.0.1:5063");
-//                }
-//                else if(pktSIP.checkMethod("BYE")) {
-//                    pktSIP.setRequestLineHost("127.0.0.1:5063");
-//                    pktSIP.setRequestURIHost("127.0.0.1:5063");                   
-//                }
+                else if(pktSIP.checkMethod("ACK")) {
+                    pktSIP.setRequestLineHost("ACK","127.0.0.1:5063");
+                }
+                else if(pktSIP.checkMethod("OPTIONS")) {
+                    pktSIP.setRequestLineHost("OPTIONS","127.0.0.1:5063");
+                    pktSIP.setToHost("127.0.0.1:5063");
+                }
+                else if(pktSIP.checkMethod("BYE")) {
+                    pktSIP.setRequestLineHost("BYE","127.0.0.1:5063");                }
                 
                 msgApplication = pktSIP.getMsg();
                 
@@ -405,12 +398,10 @@ bool Connection::init() {
                     else if(pktSIP.checkMethod("180 Ringing")) {
                         pktSIP.setVReceivedHost(localHost_);
                         pktSIP.setMHost(localHost_);
-//                        pktSIP.setContactURIHost(localHost_);
                     }
                     else if(pktSIP.checkMethod("200 OK")) {
                         pktSIP.setVReceivedHost(localHost_);
                         pktSIP.setMHost(localHost_);
-//                        pktSIP.setContactURIHost(localHost_);                       
                     }
                 }
 

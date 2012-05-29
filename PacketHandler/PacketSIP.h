@@ -37,8 +37,9 @@ public:
     bool setVHost(std::string host);
     bool setVRport(std::string host);
     bool setVReceivedHost(std::string host);
-    
+    bool setRequestLineHost(std::string requestType,std::string host);   
     bool setMHost(std::string host);
+    bool setToHost(std::string host);
     bool setViaHost(std::string host);
     bool setContactHost(std::string host);
    
