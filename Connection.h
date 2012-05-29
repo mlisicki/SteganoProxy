@@ -61,6 +61,7 @@ private:
     std::string sipProxyHost_;
     std::string rtpProxyHost_;
     std::string localHost_;
+    std::string localPort_;
 
     int sipExternalPort_;
     int sipInternalPort_;

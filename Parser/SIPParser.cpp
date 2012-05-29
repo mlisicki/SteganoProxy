@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 
 #include "SIPParser.h"
 
@@ -55,9 +56,9 @@ PacketHandler::PacketSIP SIPParser::generatePacket(char* msg) {
         char* c = pktSIP.getField("c");
         if((ct!=NULL && (strstr(ct,"xml"))!=NULL) || 
             (c!=NULL && (strstr(c,"xml"))!=NULL)) {
-                while(!(symbol_==nextline || symbol_==nullchar)) {
-                    pktSIP.getXML() << content();
-                    accept(nextline);
+                while(!(symbol_==nullchar)) {
+                    pktSIP.getXML() += symbol_.getCharacter();
+                    accept(symbol_.get());
                     pos++;
                 }
         } else {

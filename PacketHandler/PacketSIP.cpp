@@ -654,17 +654,18 @@ std::string PacketSIP::getMsg() {
         i++;
     }
     
+    msg += "\r\n";
+    
     char* ct = getField("Content-Type");
     char* c = getField("c");
     if((ct!=NULL && (strstr(ct,"xml"))!=NULL) || 
        (c!=NULL && (strstr(c,"xml"))!=NULL)) {
-        msg.resize(msg.size()-2);
-        msg += '\n';
+        msg += getXML();
+        // msg.resize(msg.size()-2);
+     //   msg += '\n';
     } else {
-        msg += "\r\n";     
+        msg += sdp_->getMsg();
     }
-       
-    msg += sdp_->getMsg();
         
     return msg;
 }

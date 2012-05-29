@@ -34,7 +34,8 @@ Connection::Connection() {
     rtpApplicationPort_ = 0; 
     rtpProxyPort_ = 0;
     rtpProxyHost_ = "";
-    localHost_ = "192.168.1.11:5060"; // "192.168.1.13:5060";
+    localHost_ = "192.168.1.11"; // "192.168.1.13:5060";
+    localPort_ = "5060";
     
     dataOutReady_ = false;
 }
@@ -532,7 +533,7 @@ bool Connection::init() {
                     pktSIP.getSDP()->setRTPPort(rtpExternalPort_);
                 }
                 if((pktSIP.getSDP()->getRTPIP())!="") {
-                    pktSIP.getSDP()->setRTPIP(localHost_);
+                    pktSIP.getSDP()->setRTPIP(localHost_ + ":" + localPort_);
                 }
                 
                 modifyOutcomingSIP(pktSIP);
@@ -620,8 +621,11 @@ int Connection::sendPacket(PacketHandler::Packet packet) {
 
 void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
         if(pktSIP.checkMethod("100 Trying")) {
-            pktSIP.setViaHost("127.0.0.1:5063");
-            pktSIP.setViaRport("5063");
+            std::string port = "";
+            port += sipApplicationPort_;
+            pktSIP.setViaHost("127.0.0.1"+port);
+            pktSIP.setViaRport(port);
+            // TODO: int to string
         }                
         else if(pktSIP.checkMethod("401 Unauthorized")) {
             pktSIP.setViaHost("127.0.0.1:5063");
@@ -657,24 +661,24 @@ void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
 
 void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
         if(pktSIP.checkMethod("PUBLISH")) {
-            pktSIP.setVHost(localHost_);
+            pktSIP.setVHost(localHost_+":"+localPort_);
         }
         else if(pktSIP.checkMethod("REGISTER")) {
-            pktSIP.setVHost(localHost_);
-            pktSIP.setMHost(localHost_);
+            pktSIP.setVHost(localHost_+":"+localPort_);
+            pktSIP.setMHost(localHost_+":"+localPort_);
         }
         else if(pktSIP.checkMethod("100 Trying")) {
             pktSIP.setVReceivedHost(SIP_PROXY_HOST);
             pktSIP.setVRport("8060");                        
         }
         else if(pktSIP.checkMethod("180 Ringing")) {
-            pktSIP.setVReceivedHost("192.168.1.11");
-            pktSIP.setVRport("5060");
-            pktSIP.setMHost(localHost_);
+            pktSIP.setVReceivedHost(SIP_PROXY_HOST);
+            pktSIP.setVRport("8060");
+            pktSIP.setMHost(localHost_+":"+localPort_);
         }
         else if(pktSIP.checkMethod("200 OK")) {
-            pktSIP.setVReceivedHost("192.168.1.11");
-            pktSIP.setVRport("5060");
-            pktSIP.setMHost(localHost_);
+            pktSIP.setVReceivedHost(SIP_PROXY_HOST);
+            pktSIP.setVRport("8060");
+            pktSIP.setMHost(localHost_+":"+localPort_);
         }
 }

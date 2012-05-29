@@ -49,6 +49,8 @@ public:
     SDP* getSDP();
     void setSDP(SDP* sdp);
     
+    std::string& getXML();
+    
     std::string getMsg();
     // Request and response header fields
     
