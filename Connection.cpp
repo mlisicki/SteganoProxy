@@ -86,15 +86,17 @@ void* Connection::listenOnSockets( void *ptr ) {
                 // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
                 
-                std::cout << pktRTP.getSequenceNumber() << std::endl;
+                // std::cout << pktRTP.getSequenceNumber() << std::endl;
                 
                 if(pktRTP.getSequenceNumber() == 0) {
                     std::cout << pktRTP.getPayload() << std::endl;
                 }
                 
+                msgApplicationRTP = pktRTP.getMsg();
+                
                 // prepare the message to send
                 slen = sizeof(classPtr->siRTPApplication_);
-                if (sendto(classPtr->RTPApplicationSock_, buf, pktSize,0, (struct sockaddr *) &(classPtr->siRTPApplication_),slen) == -1) {
+                if (sendto(classPtr->RTPApplicationSock_, msgApplicationRTP.c_str(), msgApplicationRTP.size(),0, (struct sockaddr *) &(classPtr->siRTPApplication_),slen) == -1) {
                     perror("sending rtp to application failed");
                     close(classPtr->RTPApplicationSock_);
                 }
@@ -118,7 +120,7 @@ void* Connection::listenOnSockets( void *ptr ) {
                         classPtr->sout_.str("");
                         
                         // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
-                        std::cout << pktRTP.getSequenceNumber() << std::endl;
+                       // std::cout << pktRTP.getSequenceNumber() << std::endl;
                         // std::cout << pktRTP.getPayload() << std::endl;
                     }
                 }
@@ -133,7 +135,7 @@ void* Connection::listenOnSockets( void *ptr ) {
                 
                 // prepare the message to send
                 slen = sizeof(classPtr->siRTPProxy_);    
-                if (sendto(classPtr->RTPProxySock_, buf, pktSize,0, (struct sockaddr *) &(classPtr->siRTPProxy_),slen) == -1) {
+                if (sendto(classPtr->RTPProxySock_, msgProxyRTP.c_str(), msgProxyRTP.size(),0, (struct sockaddr *) &(classPtr->siRTPProxy_),slen) == -1) {
                     perror("sending packet to sip proxy failed");
                     close(classPtr->RTPProxySock_);
                 }
