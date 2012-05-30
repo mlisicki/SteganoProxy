@@ -37,10 +37,14 @@ OBJECTFILES= \
 	${OBJECTDIR}/Connection.o \
 	${OBJECTDIR}/ApplicationManager.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/Parser/XMLSymbol.o \
+	${OBJECTDIR}/Parser/XPath.o \
 	${OBJECTDIR}/PacketHandler/PacketSIP.o \
 	${OBJECTDIR}/PacketHandler/PacketRTP.o \
+	${OBJECTDIR}/Parser/XMLParser.o \
 	${OBJECTDIR}/Parser/Symbol.o \
 	${OBJECTDIR}/PacketHandler/SDP.o \
+	${OBJECTDIR}/Parser/XPathNode.o \
 	${OBJECTDIR}/PacketHandler/Packet.o \
 	${OBJECTDIR}/Parser/SIPParser.o
 
@@ -84,6 +88,16 @@ ${OBJECTDIR}/main.o: main.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
+${OBJECTDIR}/Parser/XMLSymbol.o: Parser/XMLSymbol.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XMLSymbol.o Parser/XMLSymbol.cpp
+
+${OBJECTDIR}/Parser/XPath.o: Parser/XPath.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XPath.o Parser/XPath.cpp
+
 ${OBJECTDIR}/PacketHandler/PacketSIP.o: PacketHandler/PacketSIP.cpp 
 	${MKDIR} -p ${OBJECTDIR}/PacketHandler
 	${RM} $@.d
@@ -94,6 +108,11 @@ ${OBJECTDIR}/PacketHandler/PacketRTP.o: PacketHandler/PacketRTP.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/PacketHandler/PacketRTP.o PacketHandler/PacketRTP.cpp
 
+${OBJECTDIR}/Parser/XMLParser.o: Parser/XMLParser.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XMLParser.o Parser/XMLParser.cpp
+
 ${OBJECTDIR}/Parser/Symbol.o: Parser/Symbol.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Parser
 	${RM} $@.d
@@ -103,6 +122,11 @@ ${OBJECTDIR}/PacketHandler/SDP.o: PacketHandler/SDP.cpp
 	${MKDIR} -p ${OBJECTDIR}/PacketHandler
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/PacketHandler/SDP.o PacketHandler/SDP.cpp
+
+${OBJECTDIR}/Parser/XPathNode.o: Parser/XPathNode.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XPathNode.o Parser/XPathNode.cpp
 
 ${OBJECTDIR}/PacketHandler/Packet.o: PacketHandler/Packet.cpp 
 	${MKDIR} -p ${OBJECTDIR}/PacketHandler

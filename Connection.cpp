@@ -20,26 +20,24 @@
 
 #define BUFSIZE 8192
 
-// const char* Connection::SIP_PROXY_HOST = "sip.tpad.com";
-// const char* Connection::SIP_PROXY_HOST = "213.40.29.11";
-const char* Connection::SIP_PROXY_HOST = "194.29.169.4";
+Connection::Connection(ConnectionConfiguration& cconf) {
+    sipExternalPort_ = cconf.sipExternalPort;
+    sipProxyPort_ = cconf.sipProxyPort;
+    sipInternalPort_ = cconf.sipInternalPort;
+    sipProxyHost_.assign(cconf.sipProxyHost);
+    rtpExternalPort_ = cconf.rtpExternalPort;
+    rtpInternalPort_ = cconf.rtpInternalPort;
+    localHost_ = cconf.localIP;
+    rtpMean_ = cconf.rtpMean;
+    rtpStdDev_ = cconf.rtpStdDev;
 
-Connection::Connection() {
     sipApplicationPort_ = 0;
-    sipExternalPort_ = SIP_EXTERNAL_PORT;
-    sipProxyPort_ = SIP_PROXY_PORT;    
-    sipInternalPort_ = SIP_INTERNAL_PORT;
-    sipProxyHost_.assign(SIP_PROXY_HOST);
-    rtpExternalPort_ = RTP_EXTERNAL_PORT;
-    rtpInternalPort_ = RTP_INTERNAL_PORT;
     rtpApplicationPort_ = 0; 
     rtpProxyPort_ = 0;
     rtpProxyHost_ = "";
-    localHost_ = "192.168.1.11"; //"10.0.2.15"; // "192.168.1.13:5060";
-    localPort_ = "5060";
     
     dataOutReady_ = false;
-    rtpCountdown_ = RTP_MEAN;
+    rtpCountdown_ = rtpMean_;
 }
 
 void* Connection::listenOnSockets( void *ptr ) {
@@ -247,7 +245,7 @@ pthread_t& Connection::init() {
     siSIPProxy_.sin_family = AF_INET;
     siSIPProxy_.sin_port = htons(sipProxyPort_);
 //    siSIPProxy_.sin_addr = ((struct sockaddr_in *) addrInfoResult->ai_addr)->sin_addr;       
-    if (inet_aton(SIP_PROXY_HOST, (struct in_addr *)&(siSIPProxy_.sin_addr))==0) {
+    if (inet_aton(sipProxyHost_.c_str(), (struct in_addr *)&(siSIPProxy_.sin_addr))==0) {
         fprintf(stderr, "inet_aton() failed\n");
         exit(1);
     }
@@ -378,6 +376,7 @@ pthread_t& Connection::init() {
 //                if((pktSIP.getSDP()->getRTPIP())!="" && localHost_!="") {
                 if(localHost_!="") {
                     pktSIP.getSDP()->setRTPIP(localHost_);
+                    
                     modifyOutcomingSIP(pktSIP);
                 }
                 

@@ -9,6 +9,7 @@
 #define	APPLICATIONMANAGER_H
 
 #include <string>
+#include "ConnectionConfiguration.h"
 
 class ApplicationManager {
 public:
@@ -18,6 +19,8 @@ public:
     }
 
     std::string readLine(char* text);
+    ConnectionConfiguration loadConfigurationFromFile(std::string filename);
+
 private:
     std::string STPProxy;
     int connectionPort;
@@ -25,6 +28,7 @@ private:
     ApplicationManager();
     ApplicationManager(const ApplicationManager& orig);
     virtual ~ApplicationManager();
+    
 };
 
 #endif	/* APPLICATIONMANAGER_H */
