@@ -28,12 +28,13 @@
 #endif
 
 #include "PacketHandler/Packet.h"
+#include "ConnectionConfiguration.h"
         
 #include "Connection.h"
 
 class Connection {
 public:
-    Connection();
+    Connection(ConnectionConfiguration& cconf);
     Connection(const Connection& orig);
     virtual ~Connection();
 
@@ -74,16 +75,8 @@ private:
     std::istringstream sin_;
     std::ostringstream sout_;
 
-//    static const int BUF_SIZE = 255;
-    // For communication with SIP Proxy
-//    static const int SIP_EXTERNAL_PORT = 5060;
-    static const int SIP_EXTERNAL_PORT = 5060;
-    static const int SIP_INTERNAL_PORT = 5061;
-//    static const int SIP_PROXY_PORT = 5060;
-    static const int SIP_PROXY_PORT = 8060;
-    static const int RTP_EXTERNAL_PORT = 16100;
-    static const int RTP_INTERNAL_PORT = 16102;
-    static const char* SIP_PROXY_HOST;
+    int rtpMean_;
+    int rtpStdDev_;
     
     bool connected_;
     bool dataOutReady_;

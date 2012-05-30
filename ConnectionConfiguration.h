@@ -11,11 +11,7 @@
 #include <string>
 
 class ConnectionConfiguration {
-public:
-    ConnectionConfiguration();
-    ConnectionConfiguration(const ConnectionConfiguration& orig);
-    virtual ~ConnectionConfiguration();
-    
+public:    
     std::string sipProxyHost;
     int sipExternalPort;
     int sipInternalPort;
@@ -23,8 +19,8 @@ public:
     int rtpExternalPort;
     int rtpInternalPort;
     std::string localIP;
-private:
-
+    int rtpMean;
+    int rtpStdDev;
 };
 
 #endif	/* CONNECTIONCONFIGURATION_H */

@@ -18,9 +18,15 @@ using namespace std;
  * 
  */
 int main(int argc, char** argv) {
+    if(argc!=2) {
+        fprintf(stderr, "Wrong number of arguments\n");
+        fprintf(stderr, "\nUsage: steganoproxy configuration_file.xml\n");
+        exit(EXIT_FAILURE);
+    }
+    
     string message = "";
-    ApplicationManager::getInstance().loadConfigurationFromFile("config.xml");
-    Connection* conn = new Connection();
+    ConnectionConfiguration cconf = ApplicationManager::getInstance().loadConfigurationFromFile(argv[1]);
+    Connection* conn = new Connection(cconf);
     conn->init();
     std::cout << "Type a message to start chatting" << std::endl;
     

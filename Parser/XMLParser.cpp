@@ -15,7 +15,7 @@ XMLParser::XMLParser(char* file, XPath xPath) {
     scanStream_.open(file, std::fstream::in);
     if(!scanStream_.is_open()) {
         fprintf(stderr, "Couldn't open XML file\n");
-        fprintf(stderr, "\nUsage: XMLValuesGetter xmlfile xpathfile\n");
+        fprintf(stderr, "\nUsage: steganoproxy configuration_file.xml\n");
         exit(EXIT_FAILURE);
     }
     xPath_ = xPath;

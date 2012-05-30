@@ -7,4 +7,6 @@
 	<rtp_internal_port>16002</rtp_internal_port>
 	<sip_proxy_host>194.29.169.4</sip_proxy_host>
 	<local_ip>192.168.1.11</local_ip>
+	<rtp_mean>10</rtp_mean>
+	<rtp_std_dev>2</rtp_std_dev>
 </configuration>

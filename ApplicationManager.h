@@ -9,6 +9,7 @@
 #define	APPLICATIONMANAGER_H
 
 #include <string>
+#include "ConnectionConfiguration.h"
 
 class ApplicationManager {
 public:
@@ -18,7 +19,7 @@ public:
     }
 
     std::string readLine(char* text);
-    void loadConfigurationFromFile(std::string filename);
+    ConnectionConfiguration loadConfigurationFromFile(std::string filename);
 
 private:
     std::string STPProxy;
