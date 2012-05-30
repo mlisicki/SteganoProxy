@@ -38,7 +38,7 @@ public:
     Connection(const Connection& orig);
     virtual ~Connection();
 
-    bool init();
+    pthread_t& init();
     
     std::istringstream& getInputStream();
     std::ostringstream& getOutputStream();
@@ -87,6 +87,13 @@ private:
     static const int RTP_INTERNAL_PORT = 16102;
     static const char* SIP_PROXY_HOST;
     
+    // Parameters for random countdown setting
+    static const int RTP_MEAN = 10;
+    static const int RTP_STD_DEV = 3;
+    
+    // Countdown for next packet with hidden message
+    int rtpCountdown_;
+    
     bool connected_;
     bool dataOutReady_;
     
@@ -98,6 +105,8 @@ private:
     struct sockaddr_in siSIPApplicationListen_, siRTPApplicationListen_, siSIPProxyListen_, siRTPProxyListen_;
 
 //    pthread_mutex_t writeMessageMutex_ = PTHREAD_MUTEX_INITIALIZER;    
+    
+    pthread_t listeningThread_;
     
     void wait(float seconds);
 

@@ -53,20 +53,21 @@ unsigned char PacketRTP::getField(std::string header) {
 
 int PacketRTP::getSequenceNumber() {
     int fnum = floor(headers_["seq_num"]->first/8);
-    char* seq = &msg_[fnum];
+    unsigned char* seq = &msg_[fnum];
 
     int seqNum = (int)seq[0];
-    seqNum << 8;
+    seqNum = (seqNum << 8);
+//    std::cout << "seq[0]=" << (int)seq[0] << "seq[1]=" << (int)seq[1] << "seqNum=" << seqNum << std::endl;
     seqNum += (int)seq[1];
-    
+        
     return seqNum;
 }
 
 void PacketRTP::setSequenceNumber(int seqNum) {
     int fnum = floor(headers_["seq_num"]->first/8);
 
-    msg_[fnum+1] = (unsigned char) seqNum;
-    seqNum >> 8;
+    msg_[fnum+1] = (unsigned char) (seqNum & 255);
+    seqNum = (seqNum >> 8);
     msg_[fnum] = (unsigned char) seqNum;
 }
 
@@ -77,6 +78,19 @@ std::string PacketRTP::getPayload() {
 //        printf("%s  %d\n",msg_[i],i);
     }
     return msg;
+}
+
+void PacketRTP::setPayload(std::string payload) {
+     for(int i=floor(headers_["payload"]->first/8); i <= floor(headers_["payload"]->second/8); i++) {
+         if((i-floor(headers_["payload"]->first/8))<payload.size()) {
+          //   int payloadId =  i-floor(headers_["payload"]->first/8);
+          //   std::cout << payloadId;
+             msg_[i] = payload[i-floor(headers_["payload"]->first/8)];
+         }
+         else {
+             msg_[i] = '\0';
+         }
+     }
 }
 
 //void PacketRTP::setField(std::string header, char* content) {
