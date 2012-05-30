@@ -36,8 +36,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Connection.o \
 	${OBJECTDIR}/ApplicationManager.o \
-	${OBJECTDIR}/Parser/XPath.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/Parser/XMLSymbol.o \
+	${OBJECTDIR}/Parser/XPath.o \
 	${OBJECTDIR}/PacketHandler/PacketSIP.o \
 	${OBJECTDIR}/PacketHandler/PacketRTP.o \
 	${OBJECTDIR}/Parser/XMLParser.o \
@@ -82,15 +83,20 @@ ${OBJECTDIR}/ApplicationManager.o: ApplicationManager.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/ApplicationManager.o ApplicationManager.cpp
 
-${OBJECTDIR}/Parser/XPath.o: Parser/XPath.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Parser
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XPath.o Parser/XPath.cpp
-
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/Parser/XMLSymbol.o: Parser/XMLSymbol.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XMLSymbol.o Parser/XMLSymbol.cpp
+
+${OBJECTDIR}/Parser/XPath.o: Parser/XPath.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Parser
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XPath.o Parser/XPath.cpp
 
 ${OBJECTDIR}/PacketHandler/PacketSIP.o: PacketHandler/PacketSIP.cpp 
 	${MKDIR} -p ${OBJECTDIR}/PacketHandler

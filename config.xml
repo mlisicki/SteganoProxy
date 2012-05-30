@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <configuration>
 	<sip_external_port>5060</sip_external_port>
+	<sip_internal_port>5061</sip_internal_port>
+	<sip_proxy_port>8060</sip_proxy_port>
+	<rtp_external_port>16100</rtp_external_port>
+	<rtp_internal_port>16002</rtp_internal_port>
+	<sip_proxy_host>194.29.169.4</sip_proxy_host>
+	<local_ip>192.168.1.11</local_ip>
 </configuration>

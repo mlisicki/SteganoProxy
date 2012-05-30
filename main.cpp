@@ -10,6 +10,7 @@
 #include <string>
 #include "PacketHandler/Packet.h"
 #include "Connection.h"
+#include "ApplicationManager.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ using namespace std;
  */
 int main(int argc, char** argv) {
     string message = "";
+    ApplicationManager::getInstance().loadConfigurationFromFile("config.xml");
     Connection* conn = new Connection();
     conn->init();
     std::cout << "Type a message to start chatting" << std::endl;

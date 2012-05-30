@@ -34,7 +34,7 @@ void XMLParser::next() {
     if(!symbol_.set(c)) throw "Unexpected symbol";
 }
 
-int XMLParser::accept(SymbolValue atom) { 
+int XMLParser::accept(XMLSymbolValue atom) { 
     if(symbol_ == atom) {
         next();
         return 1;

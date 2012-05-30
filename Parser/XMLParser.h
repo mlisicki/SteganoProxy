@@ -21,7 +21,7 @@ public:
     virtual ~XMLParser();
 
     void next();
-    int accept(SymbolValue atom);
+    int accept(XMLSymbolValue atom);
     void element();
     std::string startTag();
     void endTag();
@@ -39,8 +39,8 @@ public:
 //    void program();
 //    friend class Synchronize;
 private:
-    Symbol symbol_;
-    Symbol back_;
+    XMLSymbol symbol_;
+    XMLSymbol back_;
     std::fstream scanStream_;
     XPath xPath_;
     

@@ -10,6 +10,7 @@
 #include <list>
 #include "Parser/XPath.h"
 #include "Parser/XMLParser.h"
+#include "ConnectionConfiguration.h"
 
 #include "ApplicationManager.h"
 
@@ -32,9 +33,9 @@ std::string ApplicationManager::readLine(char* text) {
     return out;
 }
 
-void ApplicationManager::loadConfigurationFromFile(char* filename) {
-    Parser::XPath xPath("/configuration/sip_external_port");
-    Parser::XMLParser parser(filename, xPath);
+void ApplicationManager::loadConfigurationFromFile(std::string filename) {
+    Parser::XPath xPath("/configuration/local_ip");
+    Parser::XMLParser parser(filename.c_str(), xPath);
     try { 
         parser.program();
     } catch(char const* err) {
@@ -45,6 +46,6 @@ void ApplicationManager::loadConfigurationFromFile(char* filename) {
     result = parser.getResult();
     
     for (std::list<std::string>::iterator it=result.begin(); it!=result.end(); ++it)
-        std::cout << " " << *it;
+        std::cout << *it;
     std::cout << std::endl;
 }

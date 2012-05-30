@@ -18,6 +18,8 @@ public:
     }
 
     std::string readLine(char* text);
+    void loadConfigurationFromFile(std::string filename);
+
 private:
     std::string STPProxy;
     int connectionPort;
@@ -26,7 +28,6 @@ private:
     ApplicationManager(const ApplicationManager& orig);
     virtual ~ApplicationManager();
     
-    void loadConfigurationFromFile(char* filename);
 };
 
 #endif	/* APPLICATIONMANAGER_H */

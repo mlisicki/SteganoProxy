@@ -27,7 +27,7 @@ const char* Connection::SIP_PROXY_HOST = "194.29.169.4";
 Connection::Connection() {
     sipApplicationPort_ = 0;
     sipExternalPort_ = SIP_EXTERNAL_PORT;
-    sipProxyPort_ = SIP_PROXY_PORT;    
+    sipProxyPort_ = SIP_PROXY_PORT;
     sipInternalPort_ = SIP_INTERNAL_PORT;
     sipProxyHost_.assign(SIP_PROXY_HOST);
     rtpExternalPort_ = RTP_EXTERNAL_PORT;
