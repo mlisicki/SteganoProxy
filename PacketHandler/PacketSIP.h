@@ -41,6 +41,7 @@ public:
     bool setMHost(std::string host);
     bool setToHost(std::string host);
     bool setViaHost(std::string host);
+    bool setViaReceivedHost(std::string host);    
     bool setViaRport(std::string host);
     bool setContactHost(std::string host);
    

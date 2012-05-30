@@ -4,9 +4,9 @@
 	<sip_internal_port>5061</sip_internal_port>
 	<sip_proxy_port>8060</sip_proxy_port>
 	<rtp_external_port>16100</rtp_external_port>
-	<rtp_internal_port>16002</rtp_internal_port>
+	<rtp_internal_port>16102</rtp_internal_port>
 	<sip_proxy_host>194.29.169.4</sip_proxy_host>
-	<local_ip>192.168.1.11</local_ip>
+	<local_ip>192.168.47.118</local_ip>
 	<rtp_mean>10</rtp_mean>
 	<rtp_std_dev>2</rtp_std_dev>
 </configuration>

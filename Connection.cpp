@@ -121,10 +121,7 @@ void* Connection::listenOnSockets( void *ptr ) {
                        // std::cout << pktRTP.getSequenceNumber() << std::endl;
                         // std::cout << pktRTP.getPayload() << std::endl;
                     }
-                }
-               
-                // std::cout << buf << std::endl;
-                
+                }     
                 
                 
                 msgProxyRTP = pktRTP.getMsg();
@@ -550,7 +547,9 @@ pthread_t& Connection::init() {
                     pktSIP.getSDP()->setRTPPort(rtpExternalPort_);
                 }
                 if((pktSIP.getSDP()->getRTPIP())!="") {
-                    pktSIP.getSDP()->setRTPIP(localHost_ + ":" + localPort_);
+                    std::stringstream sipExternalPort;
+                    sipExternalPort << sipExternalPort_;
+                    pktSIP.getSDP()->setRTPIP(localHost_ + ":" + sipExternalPort.str());
                 }
                 
                 modifyOutcomingSIP(pktSIP);
@@ -643,14 +642,17 @@ void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
         internalPort << sipInternalPort_;
         if(pktSIP.checkMethod("100 Trying")) {
             pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
+            pktSIP.setViaReceivedHost("127.0.0.1");
             pktSIP.setViaRport(applicationPort.str());
             // TODO: int to string
         }                
         else if(pktSIP.checkMethod("401 Unauthorized")) {
             pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
+            pktSIP.setViaRport(applicationPort.str());
         }
         else if(pktSIP.checkMethod("404 Not Found")) {
             pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
+            pktSIP.setViaRport(applicationPort.str());
         }
         else if(pktSIP.checkMethod("200 OK")) {
             pktSIP.setViaHost("127.0.0.1:"+applicationPort.str());
@@ -680,25 +682,27 @@ void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
 void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
         std::stringstream proxyPort;
         proxyPort << sipProxyPort_;
+        std::stringstream sipExternalPort;
+        sipExternalPort << sipExternalPort_;
         if(pktSIP.checkMethod("PUBLISH")) {
-            pktSIP.setVHost(localHost_+":"+localPort_);
+            pktSIP.setVHost(localHost_+":"+sipExternalPort.str());
         }
         else if(pktSIP.checkMethod("REGISTER")) {
-            pktSIP.setVHost(localHost_+":"+localPort_);
-            pktSIP.setMHost(localHost_+":"+localPort_);
+            pktSIP.setVHost(localHost_+":"+sipExternalPort.str());
+            pktSIP.setMHost(localHost_+":"+sipExternalPort.str());
         }
         else if(pktSIP.checkMethod("100 Trying")) {
-            pktSIP.setVReceivedHost(SIP_PROXY_HOST);
+            pktSIP.setVReceivedHost(sipProxyHost_);
             pktSIP.setVRport(proxyPort.str());                        
         }
         else if(pktSIP.checkMethod("180 Ringing")) {
-            pktSIP.setVReceivedHost(SIP_PROXY_HOST);
+            pktSIP.setVReceivedHost(sipProxyHost_);
             pktSIP.setVRport(proxyPort.str());
-            pktSIP.setMHost(localHost_+":"+localPort_);
+            pktSIP.setMHost(localHost_+":"+sipExternalPort.str());
         }
         else if(pktSIP.checkMethod("200 OK")) {
-            pktSIP.setVReceivedHost(SIP_PROXY_HOST);
+            pktSIP.setVReceivedHost(sipProxyHost_);
             pktSIP.setVRport(proxyPort.str());
-            pktSIP.setMHost(localHost_+":"+localPort_);
+            pktSIP.setMHost(localHost_+":"+sipExternalPort.str());
         }
 }
