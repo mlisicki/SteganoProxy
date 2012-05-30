@@ -35,7 +35,7 @@ Connection::Connection() {
     rtpApplicationPort_ = 0; 
     rtpProxyPort_ = 0;
     rtpProxyHost_ = "";
-    localHost_ = "10.0.2.15"; // "192.168.1.13:5060";
+    localHost_ = "192.168.1.11"; //"10.0.2.15"; // "192.168.1.13:5060";
     localPort_ = "5060";
     
     dataOutReady_ = false;
@@ -85,7 +85,12 @@ void* Connection::listenOnSockets( void *ptr ) {
                 buf[pktSize] = '\0';
                 // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
-                // std::cout << pktRTP.getPayload() << std::endl;
+                
+                std::cout << pktRTP.getSequenceNumber() << std::endl;
+                
+                if(pktRTP.getSequenceNumber() == 0) {
+                    std::cout << pktRTP.getPayload() << std::endl;
+                }
                 
                 // prepare the message to send
                 slen = sizeof(classPtr->siRTPApplication_);
@@ -112,9 +117,9 @@ void* Connection::listenOnSockets( void *ptr ) {
                         classPtr->dataOutReady_ = false;
                         classPtr->sout_.str("");
                         
-                        printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
+                        // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                         std::cout << pktRTP.getSequenceNumber() << std::endl;
-                        std::cout << pktRTP.getPayload() << std::endl;
+                        // std::cout << pktRTP.getPayload() << std::endl;
                     }
                 }
                
