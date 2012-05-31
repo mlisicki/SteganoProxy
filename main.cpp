@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <fstream>
 #include "PacketHandler/Packet.h"
 #include "Connection.h"
@@ -36,7 +37,7 @@ int main(int argc, char** argv) {
     }
     
     string message = "";
-    ConnectionConfiguration cconf = ApplicationManager::getInstance().loadConfigurationFromFile(argv[1]);        
+    ConnectionConfiguration cconf = ApplicationManager::getInstance().loadConfigurationFromFile(filename);        
     Connection* conn = new Connection(cconf);
     pthread_t connectionThread = conn->init();
 
@@ -51,14 +52,14 @@ int main(int argc, char** argv) {
             std::cout << std::endl;
         }
     } else {
-        ifstream fileToSend;
-        std::string fileToSendName;
-        std::cout << "File to send (type path): " << std::endl;
-        cin >> fileToSendName; 
-        fileToSend.open(fileToSendName);
-        fileToSend >> conn->getOutputStream();
-        conn->write();
-        fileToSend.close();
+//        ifstream fileToSend;
+//        std::string fileToSendName;
+//        std::cout << "File to send (type path): " << std::endl;
+//        cin >> fileToSendName; 
+//        fileToSend.open(fileToSendName);
+//        fileToSend >> conn->getOutputStream();
+//        conn->write();
+//        fileToSend.close();
     }
     
     std::cout << "Closing connection" << std::endl;

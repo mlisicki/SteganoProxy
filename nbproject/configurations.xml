@@ -29,6 +29,8 @@
         <itemPath>Parser/Symbol.h</itemPath>
         <itemPath>Parser/XMLParser.cpp</itemPath>
         <itemPath>Parser/XMLParser.h</itemPath>
+        <itemPath>Parser/XMLSymbol.cpp</itemPath>
+        <itemPath>Parser/XMLSymbol.h</itemPath>
         <itemPath>Parser/XPath.cpp</itemPath>
         <itemPath>Parser/XPath.h</itemPath>
         <itemPath>Parser/XPathNode.cpp</itemPath>

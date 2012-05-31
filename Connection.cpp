@@ -114,7 +114,7 @@ void* Connection::listenOnSockets( void *ptr ) {
                     if (classPtr->dataOutReady_) {
                         pktRTP.setSequenceNumber(0);
                         pktRTP.setPayload(classPtr->sout_.str());
-                        if(classPtr->sout_.empty())
+//                        if(classPtr->sout_.empty())
                              classPtr->dataOutReady_ = false;
                         classPtr->sout_.str("");
                         
