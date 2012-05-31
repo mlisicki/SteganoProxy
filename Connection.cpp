@@ -660,7 +660,8 @@ void Connection::modifyIncomingSIP(PacketHandler::PacketSIP& pktSIP) {
         }
         else if(pktSIP.checkMethod("PUBLISH")) {
             pktSIP.setRequestLineHost("PUBLISH","127.0.0.1:"+applicationPort.str());
-            pktSIP.setViaHost("127.0.0.1:"+internalPort.str());
+        //    pktSIP.setViaHost("127.0.0.1:"+internalPort.str());
+            pktSIP.setVReceivedHost("127.0.0.1");
             pktSIP.setVHost("127.0.0.1:"+applicationPort.str());
             pktSIP.setVRport(applicationPort.str());
         }

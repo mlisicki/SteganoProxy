@@ -58,7 +58,7 @@ char* PacketSIP::getField(std::string header, unsigned int listPosition) {
 //  return contents_[pos];
 }
 
-void PacketSIP::setField(std::string header, char* content, unsigned int listPosition = 0) {
+void PacketSIP::setField(std::string header, char* content, unsigned int listPosition) {
     if(header!="") {
         std::list<unsigned int>::iterator it;
         if(headers_.empty())
@@ -219,17 +219,19 @@ bool PacketSIP::setVReceivedHost(std::string host) {
         i++;
     }
     
-    while(*ch!=';')
+    while(*ch!=';' && *ch!='\r' && *ch!='\n')
         ch++;
     
-    newField[i] = *ch;
-    ch++; 
-    i++;
-    
-    while(*ch!='\r' && *ch!='\n') {
+    if(*ch==';') {  
         newField[i] = *ch;
-        ch++;
+        ch++; 
         i++;
+
+        while(*ch!='\r' && *ch!='\n') {
+            newField[i] = *ch;
+            ch++;
+            i++;
+        }
     }
     
     newField[i] = '\r';
@@ -471,7 +473,7 @@ bool PacketSIP::setRequestLineHost(std::string requestType,std::string host) {
         i++;
     }
     
-    while(*ch!=';')
+    while(*ch!=';' && (*ch==':' || *ch=='.' || (*ch>=48 && *ch <= 57)))
         ch++;
     
     newField[i] = *ch;
