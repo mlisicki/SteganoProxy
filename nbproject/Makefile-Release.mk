@@ -37,7 +37,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/Connection.o \
 	${OBJECTDIR}/ApplicationManager.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/Parser/XMLSymbol.o \
 	${OBJECTDIR}/Parser/XPath.o \
 	${OBJECTDIR}/PacketHandler/PacketSIP.o \
 	${OBJECTDIR}/PacketHandler/PacketRTP.o \
@@ -87,11 +86,6 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/Parser/XMLSymbol.o: Parser/XMLSymbol.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Parser
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Parser/XMLSymbol.o Parser/XMLSymbol.cpp
 
 ${OBJECTDIR}/Parser/XPath.o: Parser/XPath.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Parser
