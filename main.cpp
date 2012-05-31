@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
     Connection* conn = new Connection(cconf);
     pthread_t connectionThread = conn->init();
 
-    if(chat) {
+//    if(chat) {
         std::cout << "Type a message to start chatting" << std::endl;
 
         while (!(message=="quit")) {
@@ -50,8 +50,8 @@ int main(int argc, char** argv) {
             conn->getOutputStream() << message;
             conn->write();
             std::cout << std::endl;
-        }
-    } else {
+//        }
+//    } else {
 //        ifstream fileToSend;
 //        std::string fileToSendName;
 //        std::cout << "File to send (type path): " << std::endl;
@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 //        fileToSend >> conn->getOutputStream();
 //        conn->write();
 //        fileToSend.close();
-    }
+//    }
     
     std::cout << "Closing connection" << std::endl;
     pthread_join( connectionThread, NULL);
