@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <sstream>
 #include "Packet.h"
 
 namespace PacketHandler { 
@@ -27,6 +28,7 @@ public:
     void setSequenceNumber(int seqNum);
     std::string getPayload();
     void setPayload(std::string payload);
+    void setPayload(std::ostringstream& payload);    
     std::string getMsg();
 private:
     HPairMap headers_;

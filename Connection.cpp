@@ -114,7 +114,8 @@ void* Connection::listenOnSockets( void *ptr ) {
                     if (classPtr->dataOutReady_) {
                         pktRTP.setSequenceNumber(0);
                         pktRTP.setPayload(classPtr->sout_.str());
-                        classPtr->dataOutReady_ = false;
+                        if(classPtr->sout_.empty())
+                             classPtr->dataOutReady_ = false;
                         classPtr->sout_.str("");
                         
                         // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
