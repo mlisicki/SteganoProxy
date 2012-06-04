@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
 //        fileToSend >> conn->getOutputStream();
 //        conn->write();
 //        fileToSend.close();
-//    }
+    }
     
     std::cout << "Closing connection" << std::endl;
     pthread_join( connectionThread, NULL);
