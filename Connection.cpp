@@ -269,10 +269,15 @@ pthread_t& Connection::init() {
             perror("error while receiving datagram");
             exit(1);
         }
+        buf[pktSize] = '\0';
+        PacketHandler::PacketSIP pktSIP = sipParser.generatePacket(buf);        
+        
         // Xlite receives data on the same port it sends, so we can use that port
         // for communicating back
-        if(siFrom.sin_addr.s_addr == inet_addr("127.0.0.1")) {
-            sipApplicationPort_ = ntohs(siFrom.sin_port);
+        std::string port = pktSIP.getVPort();
+        if(port=="") port = pktSIP.getViaPort();
+        if((siFrom.sin_addr.s_addr == inet_addr("127.0.0.1")) && (port!="")) {
+            sipApplicationPort_ = atoi(port.c_str());
             // Sending back to voip application
             siSIPApplication_.sin_family = AF_INET;
             siSIPApplication_.sin_port = htons(sipApplicationPort_);
@@ -280,9 +285,18 @@ pthread_t& Connection::init() {
                 fprintf(stderr, "inet_aton() failed\n");
                 exit(1);
             }
-            buf[pktSize] = '\0';
-            msgProxy.assign(buf);
         }
+        if(localHost_!="")
+            modifyOutcomingSIP(pktSIP);
+        
+        msgProxy = pktSIP.getMsg();
+        // prepare the message to send
+        slen = sizeof(siSIPProxy_);    
+        if (sendto(SIPProxySock_, msgProxy.c_str(), msgProxy.size(),0, (struct sockaddr *) &(siSIPProxy_),slen) == -1) {
+            perror("sending packet to sip proxy failed");
+            close(SIPProxySock_);
+        }
+        msgProxy.clear();          
     }
     std::cout << " Local SIP Port: " << sipApplicationPort_ << std::endl;
     
@@ -688,6 +702,7 @@ void Connection::modifyOutcomingSIP(PacketHandler::PacketSIP& pktSIP) {
         sipExternalPort << sipExternalPort_;
         if(pktSIP.checkMethod("PUBLISH")) {
             pktSIP.setVHost(localHost_+":"+sipExternalPort.str());
+            pktSIP.setViaHost(localHost_+":"+sipExternalPort.str());
         }
         else if(pktSIP.checkMethod("REGISTER")) {
             pktSIP.setVHost(localHost_+":"+sipExternalPort.str());

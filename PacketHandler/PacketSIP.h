@@ -33,7 +33,9 @@ public:
     void setFieldAndPosition(unsigned int pos, std::string header, char* content);
    
     std::string getReceivedHost();
-
+    std::string getVPort();
+    std::string getViaPort();
+    
     bool setVHost(std::string host);
     bool setVRport(std::string host);
     bool setVReceivedHost(std::string host);

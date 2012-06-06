@@ -115,6 +115,72 @@ void PacketSIP::setFieldAndPosition(unsigned int pos, std::string header, char* 
 //    }
 }
 
+std::string PacketSIP::getVPort() {
+    char* ch;
+    char* found;
+    std::string out = "";
+
+    if((ch = getField("v"))==NULL)
+        return out;
+    if((found = strstr(ch,"SIP/2.0/UDP"))==NULL)
+        return out;
+
+    while(ch!=found)
+        ch++;
+        
+    while(*ch!=' ')
+        ch++;
+        
+    // check if numeric, space or dot (IP address)
+    while(*ch=='.' || (*ch >= 0x30 && *ch <= 0x39) || *ch==' ')
+        ch++;
+    
+    if(*ch!=':')
+        return out;
+        
+    ch++; 
+    
+    while(*ch!=';') {
+        out += *ch;
+        ch++;
+    }
+    
+    return out;
+}
+
+std::string PacketSIP::getViaPort() {
+    char* ch;
+    char* found;
+    std::string out = "";
+
+    if((ch = getField("Via"))==NULL)
+        return out;
+    if((found = strstr(ch,"SIP/2.0/UDP"))==NULL)
+        return out;
+
+    while(ch!=found)
+        ch++;
+        
+    while(*ch!=' ')
+        ch++;
+        
+    // check if numeric, space or dot (IP address)
+    while(*ch=='.' || (*ch >= 0x30 && *ch <= 0x39) || *ch==' ')
+        ch++;
+    
+    if(*ch!=':')
+        return out;
+        
+    ch++; 
+    
+    while(*ch!=';') {
+        out += *ch;
+        ch++;
+    }
+    
+    return out;
+}
+
 std::string PacketSIP::getReceivedHost() {
     char* ch;  
     std::string out = "";
