@@ -34,14 +34,15 @@ int main(int argc, char** argv) {
         fprintf(stderr, "Wrong number of arguments\n");
         fprintf(stderr, "\nUsage: steganoproxy -c configuration_file.xml [--chat]\n");
         exit(EXIT_FAILURE);
-    }
-    
-    string message = "";
-    ConnectionConfiguration cconf = ApplicationManager::getInstance().loadConfigurationFromFile(filename);        
-    Connection* conn = new Connection(cconf);
-    pthread_t connectionThread = conn->init();
+    }    
 
-//    if(chat) {
+    if(chat) {
+        std::string message = "";
+        ConnectionConfiguration cconf = ApplicationManager::getInstance().loadConfigurationFromFile(filename);        
+        cconf.outputToFile = false;
+        Connection* conn = new Connection(cconf);
+        pthread_t connectionThread = conn->init(); 
+        
         std::cout << "Type a message to start chatting" << std::endl;
 
         while (!(message=="quit")) {
@@ -50,20 +51,36 @@ int main(int argc, char** argv) {
             conn->getOutputStream() << message;
             conn->write();
             std::cout << std::endl;
-//        }
-//    } else {
-//        ifstream fileToSend;
-//        std::string fileToSendName;
-//        std::cout << "File to send (type path): " << std::endl;
-//        cin >> fileToSendName; 
-//        fileToSend.open(fileToSendName);
-//        fileToSend >> conn->getOutputStream();
-//        conn->write();
-//        fileToSend.close();
+        }
+        std::cout << "Closing connection" << std::endl;
+        pthread_join( connectionThread, NULL);
+    } else {
+        std::string fileToSendName="";
+        ConnectionConfiguration cconf = ApplicationManager::getInstance().loadConfigurationFromFile(filename);        
+        cconf.outputToFile = true;
+        Connection* conn = new Connection(cconf);
+        pthread_t connectionThread = conn->init();
+        
+        while (!(fileToSendName=="quit")) {        
+            ifstream fileToSend;
+            std::cout << "File to send (type path): " << std::endl;
+            cin >> fileToSendName; 
+            fileToSend.open(fileToSendName);
+            if(fileToSend.is_open()) {
+                while ( !fileToSend.eof() ) {
+                    char s = fileToSend.get();
+                    if(fileToSend.good())
+                        conn->getOutputStream() << s;
+                }
+                conn->write();
+                fileToSend.close();
+            } else {
+                std::cout << "No such file. Try again or type 'quit' to finish." << std::endl;
+            }
+        }
+        std::cout << "Closing connection" << std::endl;
+        pthread_join( connectionThread, NULL);
     }
-    
-    std::cout << "Closing connection" << std::endl;
-    pthread_join( connectionThread, NULL);
     
     return 0;
 }

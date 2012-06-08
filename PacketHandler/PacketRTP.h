@@ -27,8 +27,9 @@ public:
     int getSequenceNumber();
     void setSequenceNumber(int seqNum);
     std::string getPayload();
+    int getPayloadSize();
     void setPayload(std::string payload);
-    void setPayload(std::ostringstream& payload);    
+    void setPayload(std::stringstream& payload);    
     std::string getMsg();
 private:
     HPairMap headers_;

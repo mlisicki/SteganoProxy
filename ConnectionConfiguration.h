@@ -21,6 +21,7 @@ public:
     std::string localIP;
     int rtpMean;
     int rtpStdDev;
+    bool outputToFile;
 };
 
 #endif	/* CONNECTIONCONFIGURATION_H */

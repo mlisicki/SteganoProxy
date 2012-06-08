@@ -42,7 +42,7 @@ public:
     pthread_t& init();
     
     std::istringstream& getInputStream();
-    std::ostringstream& getOutputStream();
+    std::stringstream& getOutputStream();
 
     // Sends the stream content
     void write();
@@ -75,7 +75,7 @@ private:
     int rtpApplicationPort_;    
 
     std::istringstream sin_;
-    std::ostringstream sout_;
+    std::stringstream sout_;
 
     int rtpMean_;
     int rtpStdDev_;
@@ -100,6 +100,8 @@ private:
 //    pthread_mutex_t writeMessageMutex_ = PTHREAD_MUTEX_INITIALIZER;    
     
     pthread_t listeningThread_;
+    
+    bool outputToFile_;
     
     void wait(float seconds);
 

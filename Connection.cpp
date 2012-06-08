@@ -11,6 +11,7 @@
 #include <pthread.h>
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 
 #include "Parser/SIPParser.h"
 #include "PacketHandler/PacketRTP.h"
@@ -30,7 +31,8 @@ Connection::Connection(ConnectionConfiguration& cconf) {
     localHost_ = cconf.localIP;
     rtpMean_ = cconf.rtpMean;
     rtpStdDev_ = cconf.rtpStdDev;
-
+    outputToFile_ = cconf.outputToFile;
+    
     sipApplicationPort_ = 0;
     rtpApplicationPort_ = 0; 
     rtpProxyPort_ = 0;
@@ -50,6 +52,7 @@ void* Connection::listenOnSockets( void *ptr ) {
     std::string msgApplication = "";
     std::string msgProxyRTP = "";
     std::string msgApplicationRTP = "";
+    std::ofstream outputFile;
     
     sockaddr_in siFrom;
     slen = sizeof(siFrom);
@@ -80,14 +83,33 @@ void* Connection::listenOnSockets( void *ptr ) {
                     perror("error while receiving datagram");
                     exit(1);
                 }
-                buf[pktSize] = '\0';
+                // buf[pktSize] = '\0';
                 // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
                 
                 // std::cout << pktRTP.getSequenceNumber() << std::endl;
                 
                 if(pktRTP.getSequenceNumber() == 0) {
-                    std::cout << pktRTP.getPayload() << std::endl;
+                    if(classPtr->outputToFile_) {
+                        if(!outputFile.is_open()) {
+                            std::cout << "Receiving file";
+                            std::cout.flush();
+                            outputFile.open("out");
+                        }
+                        std::cout << ".";
+                        std::cout.flush();
+                        for(int i=0; i<pktRTP.getPayload().size();i++) {
+                            if(pktRTP.getPayload().at(i)=='\0') {
+                                outputFile.close();
+                                printf("Done.\n");
+                                break;
+                            } else {
+                               outputFile << pktRTP.getPayload().at(i);
+                            }
+                        }
+                    } else {
+                        std::cout << pktRTP.getPayload() << std::endl;
+                    }
                 }
                 
                 msgApplicationRTP = pktRTP.getMsg();
@@ -104,7 +126,7 @@ void* Connection::listenOnSockets( void *ptr ) {
                     perror("error while receiving datagram");
                     exit(1);
                 }
-                buf[pktSize] = '\0';
+                // buf[pktSize] = '\0';
                 // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                 PacketHandler::PacketRTP pktRTP(buf, pktSize);
                 classPtr->rtpCountdown_--;
@@ -113,11 +135,17 @@ void* Connection::listenOnSockets( void *ptr ) {
                     
                     if (classPtr->dataOutReady_) {
                         pktRTP.setSequenceNumber(0);
-                        pktRTP.setPayload(classPtr->sout_.str());
-//                        if(classPtr->sout_.empty())
-                             classPtr->dataOutReady_ = false;
-                        classPtr->sout_.str("");
-                        
+                        // char* s;
+                        // classPtr->sout_.get(s,pktRTP.getPayloadSize());
+//                        std::cout << s << std::endl;
+//                        std::string pl(s);
+                        pktRTP.setPayload(classPtr->sout_);
+                        if(classPtr->sout_.eof()) {
+                            classPtr->dataOutReady_ = false; 
+                            classPtr->sout_.str("");
+                            classPtr->sout_.clear();
+                        }
+
                         // printf("\nReceived RTP packet from %s:%d\n",inet_ntoa(siFrom.sin_addr), ntohs(siFrom.sin_port));
                        // std::cout << pktRTP.getSequenceNumber() << std::endl;
                         // std::cout << pktRTP.getPayload() << std::endl;
@@ -596,6 +624,7 @@ Connection::~Connection() {
 }
 
 void Connection::write() {
+    // std::cout << sout_.str() << std::endl;
     if(!sout_.str().empty()) {
         dataOutReady_ = true;
 //        int dlen = sizeof(dest_);
@@ -621,7 +650,7 @@ std::istringstream& Connection::getInputStream() {
         return sin_;
 }
 
-std::ostringstream& Connection::getOutputStream() {
+std::stringstream& Connection::getOutputStream() {
         return sout_;
 }
 

@@ -73,18 +73,20 @@ void PacketRTP::setSequenceNumber(int seqNum) {
 
 std::string PacketRTP::getPayload() {
     std::string msg = "";
-    for(int i=floor(headers_["payload"]->first/8); i <= floor(headers_["payload"]->second/8); i++) {
+    for(int i=floor(headers_["payload"]->first/8); i < floor(headers_["payload"]->second/8); i++) {
         msg += msg_[i];
-//        printf("%s  %d\n",msg_[i],i);
+//        printf("%c",msg_[i]);
     }
     return msg;
 }
 
+int PacketRTP::getPayloadSize() {
+    return (floor(headers_["payload"]->second/8) - floor(headers_["payload"]->first/8));
+}
+
 void PacketRTP::setPayload(std::string payload) {
-     for(int i=floor(headers_["payload"]->first/8); i <= floor(headers_["payload"]->second/8); i++) {
+     for(int i=floor(headers_["payload"]->first/8); i < floor(headers_["payload"]->second/8); i++) {
          if((i-floor(headers_["payload"]->first/8))<payload.size()) {
-          //   int payloadId =  i-floor(headers_["payload"]->first/8);
-          //   std::cout << payloadId;
              msg_[i] = payload[i-floor(headers_["payload"]->first/8)];
          }
          else {
@@ -93,31 +95,19 @@ void PacketRTP::setPayload(std::string payload) {
      }
 }
 
-void PacketRTP::setPayload(std::ostringstream& payload) {
-//     for(int i=floor(headers_["payload"]->first/8); i <= floor(headers_["payload"]->second/8); i++) {
-//         if((i-floor(headers_["payload"]->first/8))<payload.size()) {
-//          //   int payloadId =  i-floor(headers_["payload"]->first/8);
-//          //   std::cout << payloadId;
-//             msg_[i] = payload[i-floor(headers_["payload"]->first/8)];
-//         }
-//         else {
-//             msg_[i] = '\0';
-//         }
-//     }
+void PacketRTP::setPayload(std::stringstream& payload) {
+    for(int i=floor(headers_["payload"]->first/8); i < floor(headers_["payload"]->second/8); i++)
+        msg_[i] = '\0';
+    // int size = payload.str().size();
+    payload.read((msg_+(int)(floor(headers_["payload"]->first/8))),getPayloadSize());
+    // for(int i=floor(headers_["payload"]->first/8)+size; i<floor(headers_["payload"]->second/8); i++)
+    //    msg_[i] = '\0';
 }
-
-//void PacketRTP::setField(std::string header, char* content) {
-//    
-//}
-//
-//std::string PacketRTP::getMsg() {
-//
-//}
 
 std::string PacketRTP::getMsg() {
     std::string msg = "";
     for(int i=0; i< msgSize_; i++)
-        msg += msg_[i];
+        msg.push_back(msg_[i]);
     
     return msg;
 }
